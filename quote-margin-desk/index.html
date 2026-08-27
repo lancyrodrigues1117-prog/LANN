@@ -229,6 +229,7 @@ table.mini th:first-child,table.mini td:first-child{text-align:left;white-space:
           <button class="btn" id="addRow">Add a line</button>
           <button class="btn" id="demo">Load a sample quote</button>
           <button class="btn" id="clear">Clear</button>
+          <button class="btn" id="showRaw" hidden>Show what was read</button>
           <button class="btn" id="export" hidden>Export CSV</button>
         </div>
         <div class="paste" id="pasteBox">
@@ -743,22 +744,30 @@ function groupLines(items){
     return clean(r.parts.map(p => p.t).join(' '));
   }).filter(Boolean);
 }
+let lastPdf = {encrypted: false, objects: 0, streams: 0, textStreams: 0, chars: 0, lines: []};
 async function pdfToLines(buf){
   const bytes = new Uint8Array(buf);
   const s = latin1(bytes);
   const objs = scanObjects(s);
+  lastPdf = {encrypted: /\/Encrypt\s+\d+\s+\d+\s+R/.test(s), objects: Object.keys(objs).length,
+             streams: 0, textStreams: 0, chars: 0, lines: []};
   const cmaps = await buildCMaps(bytes, s, objs);
   let items = [];
   for(const num in objs){
     const raw = streamOf(bytes, s, objs[num]);
     if(!raw) continue;
+    lastPdf.streams++;
     const data = await decodeStream(raw, objs[num].body);
     if(!data) continue;
     const txt = latin1(data);
     if(!/\bBT\b/.test(txt) || !/(Tj|TJ)/.test(txt)) continue;
+    lastPdf.textStreams++;
     try{ items = items.concat(runContent(tokenizeContent(txt), cmaps)); }catch(e){}
   }
-  return groupLines(items);
+  const out = groupLines(items);
+  lastPdf.lines = out;
+  lastPdf.chars = out.join('').length;
+  return out;
 }
 
 
@@ -1448,20 +1457,35 @@ async function handleQuote(f){
     const lines = await pdfToLines(await f.arrayBuffer());
     const meta = (lines.find(l => /quote\s*#|estimate\s*#|qt-|est-/i.test(l)) || '').slice(0,60);
     const parsed = parseTextLines(lines);
-    if(!parsed.length){
-      setStatus('Could not read line items from that PDF — it may be a scan. Paste the quote text instead.', 'err');
-      $('pasteBox').classList.add('open');
-      return;
-    }
+    if(!parsed.length){ pdfFailed(f.name); return; }
+    $('showRaw').hidden = false;
     state.meta = meta ? clean(meta) : f.name.replace(/\.pdf$/i,'');
     addLines(parsed);
     const t = totals();
     const priced = state.lines.filter(l => l.list > 0).length;
     setStatus('Read ' + parsed.length + ' line(s) from ' + f.name + ' · ' + (parsed.length - t.missing) + ' costed · ' + priced + ' matched to the price book', t.missing ? '' : 'ok');
   }catch(e){
-    setStatus('That PDF could not be read in the browser. Paste the quote text instead.', 'err');
-    $('pasteBox').classList.add('open');
+    pdfFailed(f.name, e);
   }
+}
+// Say which stage failed, and put whatever text was recovered into the paste box
+// so it can be used straight away — or sent on to be looked at.
+function pdfFailed(fname, err){
+  $('pasteBox').classList.add('open');
+  $('showRaw').hidden = false;
+  const L = lastPdf;
+  let msg;
+  if(L.encrypted && !L.chars){
+    msg = 'That PDF is encrypted, which Zoho does on some exports, so the text cannot be read here. Open it, select the line items, copy, and paste them below — or re-save it with your browser’s Print → Save as PDF and drop that.';
+  }else if(!L.objects){
+    msg = 'That file does not look like a readable PDF' + (err ? ' (' + err.message + ')' : '') + '. Paste the quote text below instead.';
+  }else if(!L.textStreams || !L.chars){
+    msg = 'No text inside that PDF — ' + L.objects + ' objects, ' + L.streams + ' streams, none of them text. It is almost certainly a scan or an image export. Paste the quote text below instead.';
+  }else{
+    msg = 'Read ' + L.lines.length + ' lines of text out of that PDF, but none of them looked like an item line with a quantity and a price. The lines are in the box below — fix them up and press “Read these lines”, or send them to me and I will teach it this layout.';
+    $('pasteText').value = L.lines.join('\n');
+  }
+  setStatus(msg, 'err');
 }
 const drop = $('drop');
 drop.addEventListener('click', () => $('file').click());
@@ -1488,6 +1512,12 @@ $('addRow').addEventListener('click', () => {
   setStatus('Line added — pick the COGS item with ⇄ and the retail from the price book, then type qty and price.');
 });
 $('clear').addEventListener('click', () => { state.lines = []; state.meta = ''; render(); setStatus('Cleared.'); });
+$('showRaw').addEventListener('click', () => {
+  $('pasteBox').classList.add('open');
+  $('pasteText').value = lastPdf.lines.join('\n');
+  $('pasteText').focus();
+  setStatus('This is every line of text read out of the PDF. Select all and copy if you want to send it to me.');
+});
 $('demo').addEventListener('click', () => {
   state.meta = 'sample quote';
   addLines([
