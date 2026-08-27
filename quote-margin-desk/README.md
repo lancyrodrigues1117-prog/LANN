@@ -1,40 +1,57 @@
 # Quote Margin Desk
 
-A single self-contained HTML page for the sales team: drop a Zoho quote PDF,
-every line is costed against the price list, and the margin is shown before
-the quote goes out.
+One self-contained HTML page for the sales team. No build step, no
+dependencies, no network calls — open `index.html` or publish it anywhere
+static.
 
-- `index.html` — the whole tool. No build step, no dependencies, no network
-  calls. Open it directly or publish it anywhere static.
-- `pricelist-25-08-2026.json` — the cost data embedded in `index.html`,
-  extracted from `PRICE LIST - 25-08-2026.xlsx` (122 items that carry a unit
-  cost in both the Inventory and the COGS price list).
+Two views:
 
-## What it shows
+- **Quote check** — drop a Zoho quote PDF, and every line is costed against
+  the COGS list and compared with the company retail price. Shows gross
+  profit and margin per line and for the whole quote, plus how far each line
+  sits below book retail. A margin advisor answers arithmetic questions about
+  the loaded quote.
+- **Price book** — the whole June 2026 price book, searchable and filterable
+  by category and brand: purchase price, retail price, margin, multiple on
+  cost, and the Valencia fabric upcharge.
 
-- **Cost** — always the COGS column of the price list. The eight items costed only
-  in the inventory list fall back to that and are tagged on the line.
-- **List price** — the company selling price, loaded from a price PDF (or pasted).
-  Stored in the browser, so it is loaded once and applies to every later quote.
-- **Off list** — how far the quote sits below the company price, per line and in total.
-- **Margin** — against a target the user sets, as margin or as markup on cost.
+## Data
+
+| File | What it is |
+| --- | --- |
+| `cogs-2026-08-25.json` | 122 items with a unit cost, from `PRICE LIST - 25-08-2026.xlsx`. Cost basis. |
+| `price-book-2026-june.json` | 228 lines from `HBN Pricelist 2026 JUNE.xlsx` — 7 category sheets, one row per priced variant. Retail basis. |
+
+Both are embedded in `index.html`; the JSON files are kept beside it so the
+page can be regenerated when either sheet changes.
+
+The house rule is **retail = purchase × 3.5**, a 71.4% gross margin. It holds
+on 225 of 228 lines. The three BUCE wash units (S270F, S370F, S274F) sit about
+AED 8,000 above their ×3.5 figure in the source sheet; they are carried through
+exactly as the sheet has them and flagged in the price book's × cost column.
 
 ## How it works
 
-1. The PDF is read in the browser — object scan, FlateDecode / ASCII85
-   inflate, content-stream tokenizer, ToUnicode CMap mapping, then text runs
-   are grouped back into rows by their y position.
-2. Each row is parsed into item name / qty / unit price, and the name is
-   matched to the price list (exact name first, then closest by token
-   overlap). Unmatched lines are flagged and excluded from cost, so the
-   margin is never flattered by a missing cost.
-3. The advisor answers arithmetic questions from the loaded quote — target
-   margin gaps, where to add price (starting with the lines that are below
-   company list, since that raise is the easiest to defend), discount room,
-   off-list position, per-item target price, markup/margin conversion, and
-   plain sums. It is deterministic: every answer shows the formula it used.
+1. The PDF is read in the browser — object scan, Flate/ASCII85 inflate,
+   content-stream tokenizer, ToUnicode CMap mapping, then text runs are
+   grouped back into rows by their y position.
+2. Each row is parsed into item name / qty / unit price.
+3. **Cost** matches the COGS list on the Zoho item name, exact then closest.
+4. **Retail** matches the price book only when the brand *and* a distinctive
+   product word both agree, with the Zoho product type (Washunit, Stool,
+   Trolley…) breaking ties between a chair and the wash unit of the same
+   family. Lines prefixed `SP-` are never priced — the book lists finished
+   goods, not spare parts. A weak match is shown with a `?` for a human to
+   confirm; an unmatched line simply shows no retail. This strictness is
+   deliberate: a wrong retail price silently corrupts every off-list figure
+   and every piece of advice built on it.
+5. The advisor is deterministic — target-margin gaps, where to add price
+   (leading with bringing lines back to book retail), discount room, off-book
+   position, per-item target price, price-book lookups, markup/margin/multiple
+   conversion, and plain arithmetic. Every answer prints its formula.
 
-## Updating the price list
+## Updating a price list
 
-Regenerate the JSON from the new workbook and replace the `const PRICE = [...]`
-array at the top of the `<script>` block in `index.html`.
+Regenerate the JSON from the new workbook and replace the corresponding
+`const COGS = [...]` or `const BOOK = [...]` array at the top of the
+`<script>` block in `index.html`.
