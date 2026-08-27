@@ -1,318 +1,323 @@
 <title>HBN Quote Margin Desk</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
 <style>
 :root{
-  --bg:#F2F5F4; --surface:#FFFFFF; --surface-2:#E9EEEC; --raise:0 1px 2px rgba(18,28,26,.06),0 8px 24px rgba(18,28,26,.05);
-  --line:#D6DFDC; --line-strong:#B4C3BF;
-  --ink:#121C1A; --muted:#5B6B67;
-  --accent:#0E5A54; --accent-ink:#FFFFFF; --accent-soft:#DBEAE6;
-  --good:#186B43; --good-soft:#DDEFE4;
-  --warn:#8A5A0C; --warn-soft:#F4E8CF;
-  --bad:#9E2A20; --bad-soft:#F4DEDB;
-  --grid:rgba(18,28,26,.06);
+  --bg:#F5F5F7; --surface:#FFFFFF; --raised:#FFFFFF; --fill:#EFEFF3; --fill-2:#E8E8ED;
+  --sep:#D2D2D7; --hair:rgba(0,0,0,.07);
+  --ink:#1D1D1F; --muted:#6E6E73; --faint:#8E8E93;
+  --blue:#0071E3; --blue-ink:#FFFFFF; --blue-soft:#E9F2FE;
+  --green:#1D8A46; --green-soft:#E4F6EA;
+  --amber:#9A5B00; --amber-soft:#FCF0DA;
+  --red:#C9241C; --red-soft:#FDE7E5;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0D1413; --surface:#151E1C; --surface-2:#1C2725; --raise:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
-    --line:#26332F; --line-strong:#3A4A46;
-    --ink:#E6EEEB; --muted:#8FA19C;
-    --accent:#4FD0BC; --accent-ink:#06201C; --accent-soft:#123430;
-    --good:#5AC98C; --good-soft:#12301F;
-    --warn:#DFAE5C; --warn-soft:#33270F;
-    --bad:#EE857A; --bad-soft:#361A17;
-    --grid:rgba(230,238,235,.07);
+    --bg:#000000; --surface:#1C1C1E; --raised:#242426; --fill:#2C2C2E; --fill-2:#3A3A3C;
+    --sep:#38383A; --hair:rgba(255,255,255,.10);
+    --ink:#F5F5F7; --muted:#A1A1A6; --faint:#8E8E93;
+    --blue:#0A84FF; --blue-ink:#FFFFFF; --blue-soft:#0B2B4A;
+    --green:#32D74B; --green-soft:#102A17;
+    --amber:#FF9F0A; --amber-soft:#31220A;
+    --red:#FF453A; --red-soft:#331512;
+    --shadow:none;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0D1413; --surface:#151E1C; --surface-2:#1C2725; --raise:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
-  --line:#26332F; --line-strong:#3A4A46;
-  --ink:#E6EEEB; --muted:#8FA19C;
-  --accent:#4FD0BC; --accent-ink:#06201C; --accent-soft:#123430;
-  --good:#5AC98C; --good-soft:#12301F;
-  --warn:#DFAE5C; --warn-soft:#33270F;
-  --bad:#EE857A; --bad-soft:#361A17;
-  --grid:rgba(230,238,235,.07);
+  --bg:#000000; --surface:#1C1C1E; --raised:#242426; --fill:#2C2C2E; --fill-2:#3A3A3C;
+  --sep:#38383A; --hair:rgba(255,255,255,.10);
+  --ink:#F5F5F7; --muted:#A1A1A6; --faint:#8E8E93;
+  --blue:#0A84FF; --blue-ink:#FFFFFF; --blue-soft:#0B2B4A;
+  --green:#32D74B; --green-soft:#102A17;
+  --amber:#FF9F0A; --amber-soft:#31220A;
+  --red:#FF453A; --red-soft:#331512;
+  --shadow:none;
 }
 
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
-  font-family:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
-  font-size:15px; line-height:1.5;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","Segoe UI",Roboto,Arial,sans-serif;
+  font-size:15px; line-height:1.47; letter-spacing:-.01em;
   -webkit-font-smoothing:antialiased;
 }
-.num,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
-h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.015em}
-button,input,select,textarea{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-.wrap{max-width:1280px;margin:0 auto;padding:0 20px 72px}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.021em;text-wrap:balance}
+p{margin:0}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;letter-spacing:inherit}
+.tab{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 45%,transparent);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 22px 80px}
 
-/* ---------- header ---------- */
-.top{
-  display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between;
-  padding:26px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px;
+/* header */
+.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:baseline;justify-content:space-between;padding:30px 0 20px}
+.top h1{font-size:30px;line-height:1.1}
+.lede{margin-top:5px;color:var(--muted);font-size:14px;max-width:62ch}
+.lede b{color:var(--ink);font-weight:600}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;background:var(--fill);border-radius:980px;
+  padding:6px 13px;font-size:12.5px;color:var(--muted);white-space:nowrap;
 }
-.brand{display:flex;gap:14px;align-items:center}
-.mark{
-  display:grid;place-items:center;width:46px;height:46px;flex:none;border-radius:11px;
-  background:var(--accent);color:var(--accent-ink);
-  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;
-}
-.top h1{font-size:26px;font-weight:700}
-.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
-.sub b{color:var(--ink);font-weight:600}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.pill.off .dot{background:var(--faint)}
 
-.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
-.seg button{
-  border:0;background:transparent;padding:6px 12px;border-radius:6px;cursor:pointer;
-  font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.01em;
-}
-.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.seg-label{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+/* shell */
+.shell{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:start}
+@media (min-width:1400px){.shell{grid-template-columns:minmax(0,1fr) 430px;gap:24px}}
+@media (max-width:1120px){.shell{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.card{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--hair);overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 20px}
+.card-hd + .card-body{padding-top:0}
+.card-hd h2{font-size:17px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600}
 
-/* ---------- shell ---------- */
-.shell{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:20px;align-items:start}
-@media (max-width:1020px){.shell{grid-template-columns:minmax(0,1fr)}}
-.col{display:flex;flex-direction:column;gap:22px;min-width:0}
-
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--raise)}
-.card-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
-.card-hd h2{font-size:15px;font-weight:600;letter-spacing:.01em}
-.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-
-/* ---------- intake ---------- */
-.intake{padding:18px}
-.drop{
-  border:1.5px dashed var(--line-strong);border-radius:12px;background:var(--surface-2);
-  padding:26px 20px;text-align:center;cursor:pointer;transition:border-color .15s;
-}
-.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
-.drop h3{font-size:16px;font-weight:600}
-.drop p{margin:5px 0 0;color:var(--muted);font-size:13px}
-.intake-alt{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+/* buttons */
 .btn{
-  border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;padding:8px 13px;
-  font-size:13px;font-weight:600;cursor:pointer;
+  border:0;border-radius:980px;background:var(--fill);color:var(--ink);
+  padding:9px 16px;font-size:13.5px;font-weight:500;cursor:pointer;transition:background .12s,opacity .12s;
 }
-.btn:hover{border-color:var(--accent);color:var(--accent)}
-.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.btn-primary:hover{color:var(--accent-ink);filter:brightness(1.08)}
-.paste-box{margin-top:12px;display:none}
-.paste-box.open{display:block}
-.paste-box textarea{
-  width:100%;min-height:130px;resize:vertical;background:var(--surface-2);
-  border:1px solid var(--line);border-radius:10px;padding:11px 12px;
-  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.55;
-}
-.status{margin:12px 0 0;font-size:12.5px;color:var(--muted);min-height:1.2em}
-.status.err{color:var(--bad)}
-.status.ok{color:var(--good)}
+.btn:hover{background:var(--fill-2)}
+.btn.primary{background:var(--blue);color:var(--blue-ink)}
+.btn.primary:hover{opacity:.88;background:var(--blue)}
+.btn.link{background:transparent;color:var(--blue);padding:9px 6px}
+.btn.link:hover{background:transparent;text-decoration:underline}
 
-/* ---------- stats ---------- */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-@media (max-width:720px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.stat{background:var(--surface);padding:15px 16px 16px}
-.stat .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
-.stat .v{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:24px;font-weight:600;margin-top:7px;letter-spacing:-.02em}
+/* intake */
+.intake{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;padding:18px 20px 20px}
+@media (max-width:760px){.intake{grid-template-columns:minmax(0,1fr)}}
+.drop{
+  border:1.5px dashed var(--sep);border-radius:16px;background:var(--fill);
+  padding:24px 18px;text-align:center;cursor:pointer;transition:border-color .15s;
+}
+.drop:hover,.drop.over{border-color:var(--blue)}
+.drop h3{font-size:17px}
+.drop p{margin-top:6px;color:var(--muted);font-size:13px}
+.side{border-radius:16px;background:var(--fill);padding:16px 16px 14px;display:flex;flex-direction:column;gap:9px}
+.side h3{font-size:14.5px}
+.side p{font-size:12.5px;color:var(--muted)}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px}
+.paste{display:none;grid-column:1/-1}
+.paste.open{display:block}
+.paste textarea{
+  width:100%;min-height:132px;resize:vertical;background:var(--fill);border:1px solid var(--hair);
+  border-radius:14px;padding:13px 14px;font-size:13px;line-height:1.5;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+.paste .row-btns{margin-top:10px}
+.status{grid-column:1/-1;font-size:13px;color:var(--muted);min-height:1.2em}
+.status.err{color:var(--red)}
+.status.ok{color:var(--green)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--surface);border:1px solid var(--hair);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px 15px}
+.stat .k{font-size:11.5px;letter-spacing:.02em;color:var(--faint);font-weight:500}
+.stat .v{font-size:25px;font-weight:600;letter-spacing:-.028em;margin-top:6px;font-variant-numeric:tabular-nums}
 .stat .n{font-size:12px;color:var(--muted);margin-top:3px}
-.stat.hero{background:var(--accent-soft)}
-.stat.hero .v{color:var(--accent)}
-.gauge{height:5px;border-radius:3px;background:var(--surface-2);margin-top:10px;overflow:hidden}
-.gauge i{display:block;height:100%;background:var(--accent);width:0}
+.stat.hero .v{font-size:28px}
+.stat.hero .v.good{color:var(--green)}.stat.hero .v.warn{color:var(--amber)}.stat.hero .v.bad{color:var(--red)}
+.meter{height:6px;border-radius:99px;background:var(--fill);margin-top:10px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--blue);width:0;transition:width .25s ease}
 
-/* ---------- table ---------- */
-.tbl-scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:742px}
-th,td{padding:9px 7px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th{
-  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0;z-index:1;
+/* table */
+.scroller{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:850px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 7px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--hair)}
+thead th{
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600;
+  padding-top:6px;padding-bottom:9px;background:var(--surface);position:sticky;top:0;z-index:2;
 }
-th:first-child,td:first-child{text-align:left;white-space:normal;min-width:168px;padding-left:14px}
-tbody tr:hover{background:var(--surface-2)}
-td.item{font-size:13px;line-height:1.35}
-.itemname{font-weight:600}
-.matchline{display:flex;align-items:center;gap:6px;margin-top:4px}
-.chip{
-  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;
-  padding:2px 6px;border-radius:5px;text-transform:uppercase;font-weight:500;
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:176px;padding-left:20px}
+th:last-child,td:last-child{padding-right:16px}
+tbody tr:hover{background:var(--fill)}
+td.item{font-size:13.5px}
+.iname{font-weight:600;letter-spacing:-.012em}
+.imeta{display:flex;align-items:center;gap:6px;margin-top:4px}
+.tag{font-size:10.5px;font-weight:600;letter-spacing:.01em;padding:2px 7px;border-radius:980px;white-space:nowrap}
+.tag.exact{background:var(--green-soft);color:var(--green)}
+.tag.close{background:var(--amber-soft);color:var(--amber)}
+.tag.manual{background:var(--blue-soft);color:var(--blue)}
+.tag.none{background:var(--red-soft);color:var(--red)}
+.mname{font-size:11.5px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:112px}
+.swap{border:0;background:transparent;color:var(--blue);cursor:pointer;font-size:13px;padding:2px 5px;border-radius:7px;line-height:1}
+.swap:hover{background:var(--blue-soft)}
+select.remap{max-width:100%;font-size:12px;background:var(--fill);border:1px solid var(--hair);border-radius:9px;padding:4px 6px;color:var(--ink)}
+input.cell{
+  width:84px;text-align:right;background:transparent;border:1px solid transparent;border-radius:9px;
+  padding:6px 7px;font-size:13.5px;font-variant-numeric:tabular-nums;
 }
-.chip.exact{background:var(--good-soft);color:var(--good)}
-.chip.close{background:var(--warn-soft);color:var(--warn)}
-.chip.none{background:var(--bad-soft);color:var(--bad)}
-.chip.manual{background:var(--accent-soft);color:var(--accent)}
-.matchname{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:118px}
-select.remap{
-  max-width:100%;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);
-  border-radius:6px;padding:3px 5px;color:var(--muted);
-}
-td input.cell{
-  width:96px;text-align:right;background:transparent;border:1px solid transparent;border-radius:6px;
-  padding:5px 6px;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;
-}
-td input.cell:hover{border-color:var(--line)}
-td input.cell:focus{border-color:var(--accent);background:var(--surface-2);outline:none}
-td input.cell.qty{width:54px}
-td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px}
-td.gp{font-weight:600}
-.band{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
-.band::before{content:"";width:3px;height:15px;border-radius:2px;background:currentColor}
-.band.good{color:var(--good)}.band.warn{color:var(--warn)}.band.bad{color:var(--bad)}
-.rm{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:4px 6px;border-radius:6px}
-.rm:hover{color:var(--bad);background:var(--bad-soft)}
-tfoot td{border-top:2px solid var(--line-strong);border-bottom:0;font-weight:700;font-family:"IBM Plex Mono",monospace;padding-top:12px;padding-bottom:14px}
-.empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:13.5px}
-
-.notice{
-  display:block;margin:0;padding:11px 14px;font-size:12.5px;line-height:1.45;
-  background:var(--warn-soft);color:var(--warn);border-bottom:1px solid var(--line);
-}
-.notice[hidden]{display:none}
+input.cell:hover{background:var(--fill)}
+input.cell:focus{background:var(--surface);border-color:var(--blue);outline:none}
+input.cell.qty{width:46px}
+td.n{font-size:13.5px}
+td.strong{font-weight:600}
+.pctpill{display:inline-block;font-size:12.5px;font-weight:600;padding:3px 8px;border-radius:980px}
+.pctpill.good{background:var(--green-soft);color:var(--green)}
+.pctpill.warn{background:var(--amber-soft);color:var(--amber)}
+.pctpill.bad{background:var(--red-soft);color:var(--red)}
+.pctpill.flat{background:var(--fill);color:var(--muted)}
+.kill{border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:16px;line-height:1;padding:4px 6px;border-radius:8px}
+.kill:hover{color:var(--red);background:var(--red-soft)}
+tfoot td{border-bottom:0;border-top:1px solid var(--sep);font-weight:600;font-size:14px;padding-top:14px;padding-bottom:16px}
+.empty{padding:44px 22px;text-align:center;color:var(--muted);font-size:14px}
+.banner{margin:0;padding:12px 20px;font-size:13px;line-height:1.45;background:var(--amber-soft);color:var(--amber);border-bottom:1px solid var(--hair)}
+.banner[hidden]{display:none}
 [hidden]{display:none!important}
-.notice b{font-weight:600}
 
-/* ---------- advisor ---------- */
-.desk{position:sticky;top:16px;display:flex;flex-direction:column;height:min(780px,calc(100vh - 32px))}
-@media (max-width:1020px){.desk{position:static;height:auto}}
-.target{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface-2);border-radius:0}
-.target-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.target-row input[type="number"]{
-  width:72px;background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;
-  padding:6px 8px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;text-align:right;
+/* advisor */
+.desk{position:sticky;top:18px;display:flex;flex-direction:column;height:min(860px,calc(100vh - 36px))}
+@media (max-width:1120px){.desk{position:static;height:auto}}
+.desk-hd{padding:17px 20px 14px;border-bottom:1px solid var(--hair)}
+.desk-hd h2{font-size:19px}
+.desk-hd p{font-size:12.5px;color:var(--muted);margin-top:3px}
+.tgt{padding:14px 20px 16px;border-bottom:1px solid var(--hair);background:var(--fill)}
+.tgt-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stepper{display:inline-flex;align-items:center;background:var(--surface);border-radius:12px;border:1px solid var(--hair);overflow:hidden}
+.stepper button{border:0;background:transparent;color:var(--blue);font-size:19px;width:34px;height:38px;cursor:pointer;line-height:1}
+.stepper button:hover{background:var(--fill)}
+.stepper input{
+  width:56px;border:0;background:transparent;text-align:center;font-size:19px;font-weight:600;
+  font-variant-numeric:tabular-nums;padding:0;
 }
-.target-row select{background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;font-size:13px}
-.target-read{margin:10px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
-.target-read b{color:var(--ink);font-weight:600;font-family:"IBM Plex Mono",monospace}
-.target-read b.up{color:var(--bad)}
-.target-read b.ok{color:var(--good)}
-
-.log{flex:1;min-height:0;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-.msg{font-size:13.5px;line-height:1.5}
-.msg.me{align-self:flex-end;max-width:88%;background:var(--accent);color:var(--accent-ink);padding:8px 12px;border-radius:12px 12px 3px 12px}
-.msg.bot{max-width:100%}
-.msg.bot p{margin:0 0 7px}
+.seg{display:inline-flex;background:var(--fill-2);border-radius:11px;padding:2px}
+.seg button{border:0;background:transparent;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14);font-weight:600}
+.gap-read{margin-top:12px;font-size:14.5px;line-height:1.5}
+.gap-read .big{font-size:22px;font-weight:600;letter-spacing:-.02em;display:block;margin-bottom:3px;font-variant-numeric:tabular-nums}
+.gap-read .big.up{color:var(--red)}
+.gap-read .big.ok{color:var(--green)}
+.gap-read span.sub{color:var(--muted);font-size:13.5px}
+.log{flex:1;min-height:0;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:16px}
+.msg{font-size:15px;line-height:1.55}
+.msg.me{align-self:flex-end;max-width:85%;background:var(--blue);color:var(--blue-ink);padding:10px 15px;border-radius:19px 19px 5px 19px;font-size:14.5px}
+.msg.bot .lead{font-size:16.5px;font-weight:600;letter-spacing:-.02em;margin-bottom:7px}
+.msg.bot p{margin-bottom:9px}
 .msg.bot p:last-child{margin-bottom:0}
-.msg.bot .lead{font-weight:600}
 .msg.bot .formula{
-  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);
-  background:var(--surface-2);border-left:2px solid var(--line-strong);padding:6px 9px;border-radius:0 6px 6px 0;
-  white-space:pre-wrap;margin:7px 0 0;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12px;line-height:1.6;color:var(--muted);
+  background:var(--fill);border-radius:11px;padding:10px 12px;white-space:pre-wrap;margin-top:10px;overflow-x:auto;
 }
-.mini{width:100%;min-width:0;border-collapse:collapse;margin:8px 0 2px;font-size:12px}
-.mini th,.mini td{padding:5px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
-.mini th{font-size:9.5px;letter-spacing:.08em;position:static;background:transparent}
-.mini td:first-child,.mini th:first-child{text-align:left;white-space:normal;min-width:0;font-size:11.5px;line-height:1.3}
-.mini td.n{font-size:11.5px}
+.mini{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;margin:10px 0 2px;font-size:13px;font-variant-numeric:tabular-nums}
+.mini th{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:600;padding:5px 7px;border-bottom:1px solid var(--hair);background:transparent;position:static;text-align:right}
+.mini td{padding:7px;border-bottom:1px solid var(--hair);text-align:right;white-space:nowrap}
+.mini th:first-child,.mini td:first-child{text-align:left;white-space:normal;overflow-wrap:anywhere;width:44%;min-width:0;padding-left:0;font-size:12.5px;line-height:1.3}
 .mini-wrap{overflow-x:auto}
-.ask{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
-.ask input{
-  flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;
-}
-.ask input:focus{border-color:var(--accent);outline:none}
-.ask button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:9px;padding:0 14px;font-weight:600;cursor:pointer;font-size:13.5px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
-.chips button{
-  border:1px solid var(--line);background:var(--surface-2);border-radius:20px;padding:5px 11px;
-  font-size:11.5px;color:var(--muted);cursor:pointer;
-}
-.chips button:hover{border-color:var(--accent);color:var(--accent)}
+.ask{display:flex;gap:9px;padding:13px 16px;border-top:1px solid var(--hair);background:var(--surface)}
+.ask input{flex:1;min-width:0;background:var(--fill);border:1px solid transparent;border-radius:980px;padding:11px 16px;font-size:14.5px}
+.ask input:focus{border-color:var(--blue);outline:none;background:var(--surface)}
+.ask button{border:0;background:var(--blue);color:var(--blue-ink);border-radius:980px;padding:0 18px;font-size:14.5px;font-weight:600;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 16px}
+.chips button{border:0;background:var(--fill);color:var(--muted);border-radius:980px;padding:7px 13px;font-size:12.5px;cursor:pointer}
+.chips button:hover{background:var(--blue-soft);color:var(--blue)}
 
-.foot{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6;max-width:78ch}
-.foot b{color:var(--ink);font-weight:600}
-@media (max-width:1020px){.log{min-height:300px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.notes{margin-top:28px;padding-top:20px;border-top:1px solid var(--hair);color:var(--muted);font-size:13px;line-height:1.6;max-width:76ch}
+.notes b{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
 <header class="top">
-  <div class="brand">
-    <span class="mark">HBN</span>
-    <div>
-      <h1>Quote Margin Desk</h1>
-      <p class="sub">Drop a Zoho quote PDF &rarr; see the margin before you send it. Costs from <b>Price List 25 Aug 2026</b> &middot; 122 costed items &middot; AED</p>
-    </div>
-  </div>
   <div>
-    <span class="seg-label">Cost basis</span>
-    <div class="seg" id="basisSeg">
-      <button data-basis="c" aria-pressed="true">COGS list</button>
-      <button data-basis="i" aria-pressed="false">Inventory list</button>
-    </div>
+    <h1>Quote Margin Desk</h1>
+    <p class="lede">Drop a Zoho quote PDF. Every line is costed against the <b>COGS price list of 25 Aug 2026</b> and compared with the company selling price, so you see the margin before the quote goes out.</p>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="pill"><span class="dot"></span>122 costed items</span>
+    <span class="pill off" id="listPill"><span class="dot"></span>No selling-price list</span>
   </div>
 </header>
 
 <div class="shell">
   <div class="col">
 
-    <section class="card intake">
-      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload a Zoho quote PDF">
-        <h3>Drop the quote PDF here</h3>
-        <p>Zoho &rarr; Quote &rarr; Export as PDF. Nothing leaves this page &mdash; the file is read in your browser.</p>
+    <section class="card">
+      <div class="intake">
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload a Zoho quote PDF">
+          <h3>Drop the quote PDF here</h3>
+          <p>Zoho → Quote → Export as PDF. The file is read in your browser and never uploaded.</p>
+        </div>
+        <div class="side">
+          <h3>Company selling prices</h3>
+          <p id="listState">Not loaded. Add the company price PDF once and every quote is checked against it.</p>
+          <div class="row-btns">
+            <button class="btn" id="loadList">Load price PDF</button>
+            <button class="btn link" id="pasteListToggle">Paste it</button>
+          </div>
+        </div>
+        <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+        <input type="file" id="listFile" accept="application/pdf,.pdf" hidden>
+        <div class="row-btns" style="grid-column:1/-1">
+          <button class="btn" id="pasteToggle">Paste quote text</button>
+          <button class="btn" id="addRow">Add a line</button>
+          <button class="btn" id="demo">Load a sample quote</button>
+          <button class="btn" id="clear">Clear</button>
+          <button class="btn" id="export" hidden>Export CSV</button>
+        </div>
+        <div class="paste" id="pasteBox">
+          <textarea id="pasteText" placeholder="Paste the quote lines — one item per line, with qty, rate and amount:&#10;PR-Nelson-Stool-Iron   4   1,450.00   5,800.00&#10;ACC-Buce-Headrest   6   140.00   840.00"></textarea>
+          <div class="row-btns"><button class="btn primary" id="parsePaste">Read these lines</button></div>
+        </div>
+        <div class="paste" id="pasteListBox">
+          <textarea id="pasteListText" placeholder="Paste the company selling-price list — one item per line, name then price:&#10;PR-Nelson-Stool-Iron   2,400.00&#10;ACC-Buce-Headrest   190.00"></textarea>
+          <div class="row-btns"><button class="btn primary" id="parseList">Read the price list</button></div>
+        </div>
+        <p class="status" id="status">No quote loaded yet.</p>
       </div>
-      <input type="file" id="file" accept="application/pdf,.pdf" hidden>
-      <div class="intake-alt">
-        <button class="btn" id="pasteToggle">Paste quote text instead</button>
-        <button class="btn" id="addRow">Add a line manually</button>
-        <button class="btn" id="demo">Load a sample quote</button>
-        <button class="btn" id="clear">Clear</button>
-      </div>
-      <div class="paste-box" id="pasteBox">
-        <textarea id="pasteText" placeholder="Paste the quote lines. One line per item, e.g.&#10;PR-Nelson-Stool-Iron   2   1,450.00   2,900.00&#10;ACC-Buce-Headrest   4   120.00   480.00"></textarea>
-        <div class="intake-alt"><button class="btn btn-primary" id="parsePaste">Read these lines</button></div>
-      </div>
-      <p class="status" id="status">No quote loaded yet.</p>
     </section>
 
-    <section class="stats" id="stats">
-      <div class="stat"><div class="k">Quoted to client</div><div class="v num" id="sRev">&mdash;</div><div class="n" id="sRevN">0 lines</div></div>
-      <div class="stat"><div class="k">Our cost</div><div class="v num" id="sCost">&mdash;</div><div class="n" id="sCostN">COGS basis</div></div>
-      <div class="stat"><div class="k">Gross profit</div><div class="v num" id="sGp">&mdash;</div><div class="n" id="sGpN">Quote &minus; cost</div></div>
-      <div class="stat hero"><div class="k">Gross margin</div><div class="v num" id="sMargin">&mdash;</div><div class="n" id="sMarginN">Target 70%</div><div class="gauge"><i id="sGauge"></i></div></div>
+    <section class="stats">
+      <div class="stat"><div class="k">Quoted to client</div><div class="v tab" id="sRev">—</div><div class="n" id="sRevN">0 lines</div></div>
+      <div class="stat"><div class="k">At company list</div><div class="v tab" id="sList">—</div><div class="n" id="sListN">No list loaded</div></div>
+      <div class="stat"><div class="k">Our cost</div><div class="v tab" id="sCost">—</div><div class="n">COGS price list</div></div>
+      <div class="stat"><div class="k">Gross profit</div><div class="v tab" id="sGp">—</div><div class="n" id="sGpN">Quote minus cost</div></div>
+      <div class="stat hero"><div class="k">Gross margin</div><div class="v tab" id="sMargin">—</div><div class="n" id="sMarginN">Target 70%</div><div class="meter"><i id="sMeter"></i></div></div>
     </section>
 
     <section class="card">
       <div class="card-hd">
         <h2>Line items</h2>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span class="eyebrow" id="lineCount">0 lines</span>
-          <button class="btn" id="export" hidden>Export CSV</button>
-        </div>
+        <span class="lbl" id="lineCount">0 lines</span>
       </div>
-      <p class="notice" id="unmatched" hidden></p>
-      <div class="tbl-scroll">
+      <p class="banner" id="banner" hidden></p>
+      <div class="scroller">
         <table>
           <thead><tr>
-            <th>Item &amp; cost match</th><th>Qty</th><th>Price</th><th>Line total</th>
-            <th>Unit cost</th><th>Line cost</th><th>Profit</th><th>Margin</th><th></th>
+            <th>Item</th><th>Qty</th><th>List</th><th>Quoted</th><th>Off list</th>
+            <th>Total</th><th>Cost</th><th>Profit</th><th>Margin</th><th></th>
           </tr></thead>
           <tbody id="rows"></tbody>
           <tfoot id="foot" hidden><tr>
-            <td>Total</td><td></td><td></td><td class="n" id="fRev"></td>
-            <td></td><td class="n" id="fCost"></td><td class="n" id="fGp"></td><td class="n" id="fMargin"></td><td></td>
+            <td>Total</td><td></td><td class="n" id="fList"></td><td></td><td class="n" id="fOff"></td>
+            <td class="n" id="fRev"></td><td></td><td class="n" id="fGp"></td><td class="n" id="fMargin"></td><td></td>
           </tr></tfoot>
         </table>
       </div>
-      <div class="empty" id="empty">Load a quote and every line lands here with its cost, profit and margin.</div>
+      <div class="empty" id="empty">Load a quote and every line lands here with its cost, its company list price, and the margin.</div>
     </section>
   </div>
 
   <aside class="card desk">
-    <div class="card-hd"><h2>Margin advisor</h2><span class="eyebrow">arithmetic desk</span></div>
-    <div class="target">
-      <div class="target-row">
-        <label class="eyebrow" for="targetVal" style="flex:1">Target</label>
-        <input type="number" id="targetVal" value="70" min="0" max="99" step="1">
-        <span class="mono" style="font-size:13px">%</span>
-        <select id="targetMode">
-          <option value="margin">gross margin</option>
-          <option value="markup">markup on cost</option>
-        </select>
+    <div class="desk-hd">
+      <h2>Margin advisor</h2>
+      <p>Ask anything with a number in it. Every answer shows its working.</p>
+    </div>
+    <div class="tgt">
+      <div class="tgt-row">
+        <span class="lbl">Target</span>
+        <div class="stepper">
+          <button type="button" id="tDown" aria-label="Lower target">−</button>
+          <input id="targetVal" class="tab" value="70" inputmode="numeric" aria-label="Target percentage">
+          <button type="button" id="tUp" aria-label="Raise target">+</button>
+        </div>
+        <div class="seg" id="modeSeg">
+          <button data-mode="margin" aria-pressed="true">Margin</button>
+          <button data-mode="markup" aria-pressed="false">Markup</button>
+        </div>
       </div>
-      <p class="target-read" id="targetRead">Load a quote to see the gap to target.</p>
+      <p class="gap-read" id="gapRead"><span class="sub">Load a quote to see the gap to target.</span></p>
     </div>
     <div class="log" id="log"></div>
     <form class="ask" id="askForm" autocomplete="off">
@@ -323,10 +328,10 @@ tfoot td{border-top:2px solid var(--line-strong);border-bottom:0;font-weight:700
   </aside>
 </div>
 
-<p class="foot">
-  <b>How the cost is found.</b> Each quote line is matched to the price list by item name &mdash; exact first, then closest name. A line that can&rsquo;t be matched shows cost 0 and is excluded from the totals, so the margin you see is never flattered by a missing cost.
-  <b>Margin vs markup.</b> Margin is profit &divide; selling price; markup is profit &divide; cost. 70% markup is only a 41.2% margin &mdash; the advisor always says which one it used.
-  <b>Bands.</b> Margin at or above target reads green, within 10 points below reads amber, further below reads red.
+<p class="notes">
+  <b>Cost.</b> Every line is costed from the COGS price list of 25 Aug 2026, matched on item name — exact first, then closest. A line that can’t be matched shows no cost and is left out of the totals, so the margin is never flattered by a missing cost. Eight items carry a cost only in the inventory list; those lines say so.
+  <b>List price.</b> The company selling price is whatever you load from the price PDF, and “off list” is how far the quote sits below it. Above list reads green, up to 10% below reads amber, deeper reads red.
+  <b>Margin vs markup.</b> Margin is profit ÷ selling price, markup is profit ÷ cost. 70% markup is only a 41.2% margin — the advisor always says which one it used.
 </p>
 </div>
 
@@ -336,11 +341,12 @@ const PRICE = [{"n":"PR-Nelson-Stool-Iron","i":1070.0,"c":995.33,"s":"DIFFERENT"
 /* ---------- helpers ---------- */
 const $ = (id) => document.getElementById(id);
 const money = (n) => (isFinite(n) ? n : 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-const money0 = (n) => (isFinite(n) ? n : 0).toLocaleString('en-US', {maximumFractionDigits:0});
-const pc = (x, d) => (isFinite(x) ? (x*100).toFixed(d===undefined?1:d) : '0.0') + '%';
+const money0 = (n) => Math.round(isFinite(n) ? n : 0).toLocaleString('en-US');
+const pc = (x, d) => (isFinite(x) ? (x*100).toFixed(d === undefined ? 1 : d) : '0.0') + '%';
 const clean = (s) => s.replace(/\s+/g,' ').trim();
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const toks = (s) => norm(s).split(' ').filter(t => t.length > 1);
+const el = (tag, cls, txt) => { const e = document.createElement(tag); if(cls) e.className = cls; if(txt !== undefined) e.textContent = txt; return e; };
 
 const EXACT = {};
 PRICE.forEach(p => { EXACT[norm(p.n)] = p; });
@@ -352,56 +358,68 @@ function score(aT, bT){
   aT.forEach(t => { if(b.has(t)) hit++; });
   return hit / Math.max(aT.length, bT.length);
 }
-function matchItem(name){
+function bestMatch(name, index, list){
   const k = norm(name);
   if(!k) return null;
-  if(EXACT[k]) return {item: EXACT[k], kind: 'exact', score: 1};
+  if(index[k]) return {item: index[k], kind: 'exact'};
   const t = toks(name);
-  let best = null, bestS = 0;
-  for(const p of PRICE){
+  let best = null, bs = 0;
+  for(const p of list){
     const s = score(t, toks(p.n));
-    if(s > bestS){ bestS = s; best = p; }
+    if(s > bs){ bs = s; best = p; }
   }
-  if(best && bestS >= 0.45) return {item: best, kind: 'close', score: bestS};
-  return null;
+  return (best && bs >= 0.45) ? {item: best, kind: 'close'} : null;
 }
-function unitCost(item, basis){
+const matchItem = (name) => bestMatch(name, EXACT, PRICE);
+// COGS is the cost basis. The 8 items costed only in the inventory list fall back to it, and say so.
+function unitCost(item){
   if(!item) return 0;
-  const first = basis === 'c' ? item.c : item.i;
-  const second = basis === 'c' ? item.i : item.c;
-  if(first !== null && first !== undefined) return first;
-  if(second !== null && second !== undefined) return second;
+  if(item.c !== null && item.c !== undefined) return item.c;
+  if(item.i !== null && item.i !== undefined) return item.i;
   return 0;
 }
+const costIsFallback = (item) => !!item && (item.c === null || item.c === undefined) && item.i > 0;
 
 /* ---------- state ---------- */
-const state = { lines: [], basis: 'c', target: 70, mode: 'margin', meta: '' };
+const state = {lines: [], target: 70, mode: 'margin', meta: '', listPrices: {}, listCount: 0, listSource: ''};
 let uid = 0;
 
+function listPriceFor(name, match){
+  if(!state.listCount) return null;
+  const keys = [match ? norm(match.n) : null, norm(name)];
+  for(const k of keys){ if(k && state.listPrices[k] !== undefined) return state.listPrices[k]; }
+  const t = toks(match ? match.n : name);
+  let bestK = null, bs = 0;
+  for(const k in state.listPrices){
+    const s = score(t, toks(k));
+    if(s > bs){ bs = s; bestK = k; }
+  }
+  return bs >= 0.6 ? state.listPrices[bestK] : null;
+}
 function totals(){
-  let rev = 0, cost = 0, missing = 0;
+  let rev = 0, cost = 0, list = 0, listed = 0, missing = 0;
   state.lines.forEach(l => {
     rev += l.qty * l.price;
     if(l.cost > 0) cost += l.qty * l.cost; else missing++;
+    if(l.list > 0){ list += l.qty * l.list; listed += l.qty * l.price; }
   });
   const gp = rev - cost;
-  return {rev, cost, gp, margin: rev > 0 ? gp/rev : 0, markup: cost > 0 ? gp/cost : 0, missing};
+  return {rev, cost, gp, list, listed, margin: rev > 0 ? gp/rev : 0, markup: cost > 0 ? gp/cost : 0, missing,
+          offList: list > 0 ? (list - listed)/list : 0};
 }
-function targetFraction(){
-  const t = state.target/100;
-  return state.mode === 'margin' ? t : t/(1+t);   // markup -> equivalent margin
-}
-function requiredRevenue(cost){
-  const m = targetFraction();
-  return m >= 1 ? Infinity : cost/(1-m);
-}
+const targetFraction = () => { const t = state.target/100; return state.mode === 'margin' ? t : t/(1+t); };
+const requiredRevenue = (cost) => { const m = targetFraction(); return m >= 1 ? Infinity : cost/(1-m); };
 function bandOf(m){
   const t = targetFraction();
   if(m >= t) return 'good';
   if(m >= t - 0.10) return 'warn';
   return 'bad';
 }
-
+function offBand(off){
+  if(off <= 0.0001) return 'good';
+  if(off <= 0.10) return 'warn';
+  return 'bad';
+}
 /* ---------- PDF text extraction (in-browser, no libraries) ---------- */
 function latin1(bytes){
   let out = '', CH = 0x8000;
@@ -690,94 +708,138 @@ async function pdfToLines(buf){
   return groupLines(items);
 }
 
-/* ---------- quote line parsing ---------- */
-const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|p\.?o\.?)/i;
+/* ---------- reading quote lines and price lines ---------- */
+const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|price list|effective|p\.?o\.?)/i;
+function numbersIn(line){
+  const re = /-?\d[\d,]*(?:\.\d+)?/g;
+  const out = [];
+  let m;
+  while((m = re.exec(line))) out.push({raw: m[0], v: parseFloat(m[0].replace(/,/g,'')), at: m.index});
+  return out;
+}
 function parseTextLines(rawLines){
   const out = [];
   for(const raw of rawLines){
     const line = clean(raw).replace(/ /g,' ');
-    if(line.length < 4 || SKIP.test(line)) continue;
-    if(!/[A-Za-z]{3}/.test(line)) continue;
-    const re = /-?\d[\d,]*(?:\.\d+)?/g;
-    const nums = [];
-    let m;
-    while((m = re.exec(line))) nums.push({raw: m[0], v: parseFloat(m[0].replace(/,/g,'')), at: m.index});
+    if(line.length < 4 || SKIP.test(line) || !/[A-Za-z]{3}/.test(line)) continue;
+    const nums = numbersIn(line);
     if(nums.length < 2) continue;
     const lastLetter = line.search(/[A-Za-z](?![\s\S]*[A-Za-z])/);
     const tail = nums.filter(n => n.at > lastLetter);
     if(tail.length < 2) continue;
-    let qty, price, amount;
+    let qty, price;
     if(tail.length >= 3){
-      qty = tail[tail.length-3].v; price = tail[tail.length-2].v; amount = tail[tail.length-1].v;
-      if(Math.abs(qty*price - amount) > Math.max(1, Math.abs(amount)*0.06) && Math.abs(tail[tail.length-2].v * tail[tail.length-3].v) === 0){ continue; }
+      qty = tail[tail.length-3].v; price = tail[tail.length-2].v;
     }else{
-      price = tail[0].v; amount = tail[1].v;
+      price = tail[0].v;
+      const amount = tail[1].v;
       qty = price > 0 ? Math.round(amount/price) : 1;
       if(!isFinite(qty) || qty < 1) qty = 1;
     }
     if(!(price > 0) || !(qty > 0) || qty > 9999) continue;
-    let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, ''));
-    name = name.replace(/[|:;,\-\s]+$/,'');
+    let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, '')).replace(/[|:;,\-\s]+$/,'');
     if(name.replace(/[^A-Za-z]/g,'').length < 3) continue;
     out.push({name, qty, price});
   }
   return out;
 }
+// A price sheet is name + one price. Take the last number on the line.
+function parsePriceLines(rawLines){
+  const out = [];
+  for(const raw of rawLines){
+    const line = clean(raw).replace(/ /g,' ');
+    if(line.length < 4 || SKIP.test(line) || !/[A-Za-z]{3}/.test(line)) continue;
+    const nums = numbersIn(line);
+    if(!nums.length) continue;
+    const lastLetter = line.search(/[A-Za-z](?![\s\S]*[A-Za-z])/);
+    const tail = nums.filter(n => n.at > lastLetter);
+    if(!tail.length) continue;
+    const price = tail[tail.length-1].v;
+    if(!(price > 0)) continue;
+    let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, '')).replace(/[|:;,\-\s]+$/,'');
+    if(name.replace(/[^A-Za-z]/g,'').length < 3) continue;
+    out.push({name, price});
+  }
+  return out;
+}
+function applyPriceList(pairs){
+  const map = {};
+  let n = 0;
+  pairs.forEach(p => {
+    const m = matchItem(p.name);
+    const key = norm(m ? m.item.n : p.name);
+    if(map[key] === undefined) n++;
+    map[key] = p.price;
+  });
+  state.listPrices = map;
+  state.listCount = n;
+  state.lines.forEach(l => { l.list = listPriceFor(l.name, l.match) || 0; });
+  paintListState();
+  render();
+  return n;
+}
+function paintListState(){
+  const pill = $('listPill');
+  const st = $('listState');
+  if(state.listCount){
+    pill.classList.remove('off');
+    pill.lastChild.textContent = state.listCount + ' selling prices';
+    st.textContent = 'Loaded ' + state.listCount + ' selling prices' + (state.listSource ? ' from ' + state.listSource : '') + '. Every quote is checked against them.';
+  }else{
+    pill.classList.add('off');
+    pill.lastChild.textContent = 'No selling-price list';
+    st.textContent = 'Not loaded. Add the company price PDF once and every quote is checked against it.';
+  }
+}
 function addLines(parsed){
   state.lines = parsed.map(p => {
     const mt = matchItem(p.name);
+    const item = mt ? mt.item : null;
     return {
       id: ++uid, name: p.name, qty: p.qty, price: p.price,
-      match: mt ? mt.item : null, kind: mt ? mt.kind : 'none',
-      cost: unitCost(mt ? mt.item : null, state.basis), costEdited: false
+      match: item, kind: mt ? mt.kind : 'none',
+      cost: unitCost(item), costEdited: false, fallback: costIsFallback(item),
+      list: listPriceFor(p.name, item) || 0
     };
   });
   render();
 }
 
-/* ---------- rendering ---------- */
-function rowHTML(l){
-  return '<td class="item"><div class="itemname"></div><div class="matchline"></div></td>' +
+/* ---------- table ---------- */
+function rowHTML(){
+  return '<td class="item"><div class="iname"></div><div class="imeta"></div></td>' +
     '<td><input class="cell qty" type="number" min="0" step="1" data-k="qty"></td>' +
-    '<td><input class="cell price" type="number" min="0" step="0.01" data-k="price"></td>' +
-    '<td class="n" data-f="rev"></td>' +
-    '<td><input class="cell cost" type="number" min="0" step="0.01" data-k="cost"></td>' +
-    '<td class="n" data-f="cost"></td>' +
-    '<td class="n gp" data-f="gp"></td>' +
+    '<td><input class="cell" type="number" min="0" step="0.01" data-k="list" placeholder="—"></td>' +
+    '<td><input class="cell" type="number" min="0" step="0.01" data-k="price"></td>' +
+    '<td data-f="off"></td>' +
+    '<td class="n strong" data-f="rev"></td>' +
+    '<td><input class="cell" type="number" min="0" step="0.01" data-k="cost"></td>' +
+    '<td class="n" data-f="gp"></td>' +
     '<td data-f="margin"></td>' +
-    '<td><button class="rm" title="Remove line">&times;</button></td>';
+    '<td><button class="kill" title="Remove line">&times;</button></td>';
 }
-function paintMatch(tr, l){
-  tr.querySelector('.itemname').textContent = l.name;
-  const box = tr.querySelector('.matchline');
+function paintMeta(tr, l){
+  tr.querySelector('.iname').textContent = l.name;
+  const box = tr.querySelector('.imeta');
   box.textContent = '';
-  const chip = document.createElement('span');
-  chip.className = 'chip ' + l.kind;
-  chip.textContent = l.kind === 'exact' ? 'matched' : l.kind === 'close' ? 'closest' : l.kind === 'manual' ? 'set by hand' : 'no cost';
-  box.appendChild(chip);
-  const nm = document.createElement('span');
-  nm.className = 'matchname';
-  nm.textContent = l.match ? l.match.n : 'not on the price list';
-  nm.title = l.match ? l.match.n : 'No price-list item matched this line';
+  const tag = el('span', 'tag ' + l.kind,
+    l.kind === 'exact' ? 'Costed' : l.kind === 'close' ? 'Closest match' : l.kind === 'manual' ? 'Set by hand' : 'No cost');
+  box.appendChild(tag);
+  const nm = el('span', 'mname', l.match ? l.match.n : 'not on the price list');
+  nm.title = l.match ? l.match.n + (l.fallback ? ' — cost from the inventory list (blank in COGS)' : '') : 'No price-list item matched this line';
   box.appendChild(nm);
-  const b = document.createElement('button');
-  b.className = 'rm';
-  b.title = 'Pick a different price-list item';
-  b.textContent = '⇄';
-  b.addEventListener('click', () => openRemap(box, tr, l));
-  box.appendChild(b);
+  if(l.fallback) box.appendChild(el('span', 'tag close', 'Inv. cost'));
+  const sw = el('button', 'swap', '⇄');
+  sw.title = 'Pick a different price-list item';
+  sw.addEventListener('click', () => openRemap(box, tr, l));
+  box.appendChild(sw);
 }
 function openRemap(box, tr, l){
-  const sel = document.createElement('select');
-  sel.className = 'remap';
-  const none = document.createElement('option');
-  none.value = '';
-  none.textContent = 'No price-list item';
-  sel.appendChild(none);
+  const sel = el('select', 'remap');
+  sel.appendChild(el('option', null, 'No price-list item')).value = '';
   PRICE.forEach((p, i) => {
-    const o = document.createElement('option');
+    const o = el('option', null, p.n);
     o.value = String(i);
-    o.textContent = p.n;
     if(l.match && l.match.n === p.n) o.selected = true;
     sel.appendChild(o);
   });
@@ -785,10 +847,13 @@ function openRemap(box, tr, l){
     const p = sel.value === '' ? null : PRICE[+sel.value];
     l.match = p;
     l.kind = p ? 'manual' : 'none';
-    l.cost = unitCost(p, state.basis);
+    l.cost = unitCost(p);
+    l.fallback = costIsFallback(p);
     l.costEdited = false;
-    paintMatch(tr, l);
+    l.list = listPriceFor(l.name, p) || 0;
+    paintMeta(tr, l);
     tr.querySelector('[data-k="cost"]').value = l.cost ? l.cost.toFixed(2) : '';
+    tr.querySelector('[data-k="list"]').value = l.list ? l.list.toFixed(2) : '';
     updateAll();
   });
   box.textContent = '';
@@ -799,23 +864,27 @@ function render(){
   const tb = $('rows');
   tb.textContent = '';
   state.lines.forEach(l => {
-    const tr = document.createElement('tr');
+    const tr = el('tr');
     tr.dataset.id = String(l.id);
-    tr.innerHTML = rowHTML(l);
-    paintMatch(tr, l);
+    tr.innerHTML = rowHTML();
+    paintMeta(tr, l);
     tr.querySelector('[data-k="qty"]').value = l.qty;
     tr.querySelector('[data-k="price"]').value = l.price.toFixed(2);
     tr.querySelector('[data-k="cost"]').value = l.cost ? l.cost.toFixed(2) : '';
+    tr.querySelector('[data-k="list"]').value = l.list ? l.list.toFixed(2) : '';
     tr.querySelectorAll('input.cell').forEach(inp => {
       inp.addEventListener('input', () => {
         const k = inp.dataset.k;
         const v = parseFloat(inp.value);
         l[k] = isFinite(v) && v >= 0 ? v : 0;
-        if(k === 'cost'){ l.costEdited = true; if(l.kind === 'none' && l.cost > 0){ l.kind = 'manual'; paintMatch(tr, l); } }
+        if(k === 'cost'){
+          l.costEdited = true; l.fallback = false;
+          if(l.kind === 'none' && l.cost > 0){ l.kind = 'manual'; paintMeta(tr, l); }
+        }
         updateAll();
       });
     });
-    tr.querySelectorAll('td:last-child .rm')[0].addEventListener('click', () => {
+    tr.querySelector('.kill').addEventListener('click', () => {
       state.lines = state.lines.filter(x => x.id !== l.id);
       render();
     });
@@ -826,128 +895,129 @@ function render(){
   $('export').hidden = state.lines.length === 0;
   updateAll();
 }
+function pill(cls, txt){ return el('span', 'pctpill ' + cls, txt); }
 function updateAll(){
   const t = totals();
   state.lines.forEach(l => {
     const tr = $('rows').querySelector('tr[data-id="' + l.id + '"]');
     if(!tr) return;
-    const rev = l.qty * l.price, cost = l.qty * l.cost, gp = rev - cost;
+    const rev = l.qty*l.price, cost = l.qty*l.cost, gp = rev - cost;
     const m = rev > 0 ? gp/rev : 0;
-    tr.querySelector('[data-f="rev"]').textContent = money(rev);
-    tr.querySelector('[data-f="cost"]').textContent = l.cost > 0 ? money(cost) : '—';
-    tr.querySelector('[data-f="gp"]').textContent = l.cost > 0 ? money(gp) : '—';
+    tr.querySelector('[data-f="rev"]').textContent = money0(rev);
+    tr.querySelector('[data-f="gp"]').textContent = l.cost > 0 ? money0(gp) : '—';
+    const offC = tr.querySelector('[data-f="off"]');
+    offC.textContent = '';
+    if(l.list > 0){
+      const off = (l.list - l.price)/l.list;
+      offC.appendChild(pill(offBand(off), off > 0 ? '−' + pc(off,0) : off < -0.0001 ? '+' + pc(-off,0) : 'at list'));
+    }else{ offC.textContent = '—'; }
     const mc = tr.querySelector('[data-f="margin"]');
     mc.textContent = '';
-    if(l.cost > 0){
-      const sp = document.createElement('span');
-      sp.className = 'band ' + bandOf(m);
-      sp.textContent = pc(m);
-      mc.appendChild(sp);
-    }else{
-      mc.textContent = '—';
-    }
+    if(l.cost > 0) mc.appendChild(pill(bandOf(m), pc(m,0)));
+    else mc.textContent = '—';
   });
   $('sRev').textContent = money0(t.rev);
   $('sRevN').textContent = state.lines.length + (state.lines.length === 1 ? ' line' : ' lines') + (state.meta ? ' · ' + state.meta : '');
+  $('sList').textContent = t.list > 0 ? money0(t.list) : '—';
+  $('sListN').textContent = t.list > 0
+    ? (t.offList > 0.0001 ? pc(t.offList) + ' below list' : t.offList < -0.0001 ? pc(-t.offList) + ' above list' : 'quoted at list')
+    : (state.listCount ? 'no matching lines' : 'no list loaded');
   $('sCost').textContent = money0(t.cost);
-  $('sCostN').textContent = (state.basis === 'c' ? 'COGS price list' : 'Inventory price list') + ' basis';
   $('sGp').textContent = money0(t.gp);
   $('sGpN').textContent = t.rev > 0 ? 'Markup on cost ' + pc(t.markup) : 'Quote minus cost';
-  $('sMargin').textContent = t.rev > 0 ? pc(t.margin) : '—';
-  $('sMarginN').textContent = 'Target ' + state.target + '% ' + (state.mode === 'margin' ? 'margin' : 'markup → ' + pc(targetFraction()) + ' margin');
-  $('sGauge').style.width = Math.max(0, Math.min(100, t.margin * 100)) + '%';
-  $('sGauge').style.background = t.rev > 0 ? 'var(--' + ({good:'good', warn:'warn', bad:'bad'}[bandOf(t.margin)]) + ')' : 'var(--line)';
-  $('fRev').textContent = money(t.rev);
-  $('fCost').textContent = money(t.cost);
-  $('fGp').textContent = money(t.gp);
-  $('fMargin').textContent = t.rev > 0 ? pc(t.margin) : '—';
+  const mv = $('sMargin');
+  mv.textContent = t.rev > 0 ? pc(t.margin) : '—';
+  mv.className = 'v tab' + (t.rev > 0 ? ' ' + bandOf(t.margin) : '');
+  $('sMarginN').textContent = 'Target ' + state.target + '% ' + (state.mode === 'margin' ? 'margin' : 'markup, = ' + pc(targetFraction()) + ' margin');
+  const meter = $('sMeter');
+  meter.style.width = Math.max(0, Math.min(100, t.margin*100)) + '%';
+  meter.style.background = t.rev > 0 ? 'var(--' + ({good:'green', warn:'amber', bad:'red'}[bandOf(t.margin)]) + ')' : 'var(--sep)';
+  $('fRev').textContent = money0(t.rev);
+  $('fList').textContent = t.list > 0 ? money0(t.list) : '—';
+  $('fOff').textContent = '';
+  if(t.list > 0) $('fOff').appendChild(pill(offBand(t.offList), t.offList > 0.0001 ? '−' + pc(t.offList,0) : 'at list'));
+  else $('fOff').textContent = '—';
+  $('fGp').textContent = money0(t.gp);
+  $('fMargin').textContent = '';
+  if(t.rev > 0) $('fMargin').appendChild(pill(bandOf(t.margin), pc(t.margin)));
   $('lineCount').textContent = state.lines.length + (state.lines.length === 1 ? ' line' : ' lines');
-  const un = $('unmatched');
+  const bn = $('banner');
   if(t.missing > 0){
-    un.hidden = false;
-    un.textContent = '';
-    const b = document.createElement('b');
-    b.textContent = t.missing + (t.missing === 1 ? ' line has ' : ' lines have ') + 'no cost yet.';
-    un.appendChild(b);
-    un.appendChild(document.createTextNode(' They are left out of cost and profit, so the real margin is lower than shown. Pick the price-list item with ⇄, or type the cost in.'));
-  }else{
-    un.hidden = true;
-  }
-  paintTarget(t);
+    bn.hidden = false;
+    bn.textContent = '';
+    bn.appendChild(el('b', null, t.missing + (t.missing === 1 ? ' line has ' : ' lines have ') + 'no cost yet.'));
+    bn.appendChild(document.createTextNode(' They are left out of cost and profit, so the real margin is lower than shown. Pick the price-list item with ⇄, or type the cost in.'));
+  }else bn.hidden = true;
+  paintGap(t);
   save();
 }
-function paintTarget(t){
-  const el = $('targetRead');
-  el.textContent = '';
-  if(state.lines.length === 0 || t.rev <= 0){ el.textContent = 'Load a quote to see the gap to target.'; return; }
-  const m = targetFraction();
+function paintGap(t){
+  const box = $('gapRead');
+  box.textContent = '';
+  if(!state.lines.length || t.rev <= 0){ box.appendChild(el('span', 'sub', 'Load a quote to see the gap to target.')); return; }
   const need = requiredRevenue(t.cost);
   const gap = need - t.rev;
-  const label = state.mode === 'margin' ? state.target + '% margin' : state.target + '% markup (= ' + pc(m) + ' margin)';
-  const frag = document.createDocumentFragment();
-  const add = (txt, cls) => { const b = document.createElement('b'); b.textContent = txt; if(cls) b.className = cls; frag.appendChild(b); };
-  frag.appendChild(document.createTextNode('At ' + label + ' this quote needs to be '));
-  add('AED ' + money0(need));
-  frag.appendChild(document.createTextNode('. You are at '));
-  add('AED ' + money0(t.rev));
+  const label = state.mode === 'margin' ? state.target + '% margin' : state.target + '% markup (' + pc(targetFraction()) + ' margin)';
   if(gap > 0.5){
-    frag.appendChild(document.createTextNode(' — short by '));
-    add('AED ' + money0(gap), 'up');
-    frag.appendChild(document.createTextNode(' (+' + pc(gap/t.rev) + ' across the quote).'));
+    box.appendChild(el('span', 'big up', 'Short AED ' + money0(gap)));
+    box.appendChild(el('span', 'sub', 'The quote needs to be AED ' + money0(need) + ' for ' + label + '. You are at AED ' + money0(t.rev) + ' — that is +' + pc(gap/t.rev) + ' across the quote.'));
   }else{
-    frag.appendChild(document.createTextNode(' — clear by '));
-    add('AED ' + money0(-gap), 'ok');
-    frag.appendChild(document.createTextNode('. Room to discount ' + pc(-gap/t.rev) + '.'));
+    box.appendChild(el('span', 'big ok', 'Clear by AED ' + money0(-gap)));
+    box.appendChild(el('span', 'sub', label + ' needs AED ' + money0(need) + ' and you are quoting AED ' + money0(t.rev) + '. Room to discount ' + pc(-gap/t.rev) + '.'));
   }
-  el.appendChild(frag);
 }
 
 /* ---------- persistence ---------- */
 function save(){
   try{
-    localStorage.setItem('hbn-margin-desk', JSON.stringify({
-      basis: state.basis, target: state.target, mode: state.mode, meta: state.meta,
-      lines: state.lines.map(l => ({n: l.name, q: l.qty, p: l.price, c: l.cost, k: l.kind, m: l.match ? l.match.n : null}))
+    localStorage.setItem('hbn-margin-desk-2', JSON.stringify({
+      target: state.target, mode: state.mode, meta: state.meta,
+      listPrices: state.listPrices, listCount: state.listCount, listSource: state.listSource,
+      lines: state.lines.map(l => ({n:l.name, q:l.qty, p:l.price, c:l.cost, k:l.kind, l:l.list, f:l.fallback, m:l.match ? l.match.n : null}))
     }));
   }catch(e){}
 }
 function restore(){
   try{
-    const raw = localStorage.getItem('hbn-margin-desk');
-    if(!raw) return false;
-    const d = JSON.parse(raw);
-    if(!d || !Array.isArray(d.lines) || !d.lines.length) return false;
-    state.basis = d.basis === 'i' ? 'i' : 'c';
+    const d = JSON.parse(localStorage.getItem('hbn-margin-desk-2') || 'null');
+    if(!d) return false;
     state.target = +d.target || 70;
     state.mode = d.mode === 'markup' ? 'markup' : 'margin';
     state.meta = d.meta || '';
-    state.lines = d.lines.map(l => ({
-      id: ++uid, name: l.n, qty: +l.q || 0, price: +l.p || 0, cost: +l.c || 0,
-      kind: l.k || 'none', match: l.m ? (EXACT[norm(l.m)] || null) : null, costEdited: false
+    state.listPrices = d.listPrices || {};
+    state.listCount = +d.listCount || 0;
+    state.listSource = d.listSource || '';
+    state.lines = (d.lines || []).map(l => ({
+      id: ++uid, name: l.n, qty: +l.q || 0, price: +l.p || 0, cost: +l.c || 0, list: +l.l || 0,
+      kind: l.k || 'none', fallback: !!l.f, match: l.m ? (EXACT[norm(l.m)] || null) : null, costEdited: false
     }));
-    return true;
+    return state.lines.length > 0 || state.listCount > 0;
   }catch(e){ return false; }
 }
 
 /* ---------- advisor ---------- */
-function el(tag, cls, txt){ const e = document.createElement(tag); if(cls) e.className = cls; if(txt !== undefined) e.textContent = txt; return e; }
 function pushMsg(node, who){
   const log = $('log');
   const d = el('div', 'msg ' + who);
   if(typeof node === 'string') d.textContent = node; else d.appendChild(node);
   log.appendChild(d);
-  log.scrollTop = log.scrollHeight;
+  // An answer is read from its first line, so park the top of it at the top of the panel.
+  if(who === 'bot' && d.getBoundingClientRect().height > log.clientHeight - 40){
+    log.scrollTop += d.getBoundingClientRect().top - log.getBoundingClientRect().top - 8;
+  }else{
+    log.scrollTop = log.scrollHeight;
+  }
 }
 function mini(head, rows){
   const wrap = el('div', 'mini-wrap');
   const t = el('table', 'mini');
-  const th = el('tr');
-  head.forEach((h, i) => { const c = el('th', null, h); if(i) c.style.textAlign = 'right'; th.appendChild(c); });
-  t.appendChild(el('thead')).appendChild(th);
+  const hr = el('tr');
+  head.forEach(h => hr.appendChild(el('th', null, h)));
+  t.appendChild(el('thead')).appendChild(hr);
   const tb = el('tbody');
   rows.forEach(r => {
     const tr = el('tr');
-    r.forEach((v, i) => { tr.appendChild(el("td", i ? "n" : null, v)); });
+    r.forEach(v => tr.appendChild(el('td', null, v)));
     tb.appendChild(tr);
   });
   t.appendChild(tb);
@@ -957,7 +1027,7 @@ function mini(head, rows){
 function bot(parts){
   const box = el('div');
   parts.forEach(p => {
-    if(p === null || p === undefined) return;
+    if(!p) return;
     if(p.lead) box.appendChild(el('p', 'lead', p.lead));
     else if(p.p) box.appendChild(el('p', null, p.p));
     else if(p.formula) box.appendChild(el('div', 'formula', p.formula));
@@ -1000,12 +1070,7 @@ function askedAmount(q){
   const m = /(?:aed|dhs)?\s*([\d,]+(?:\.\d+)?)\s*(?:aed|dhs|off|discount)/.exec(q);
   return m ? parseFloat(m[1].replace(/,/g,'')) : null;
 }
-function askedMode(q, fallback){
-  if(/mark ?up/.test(q)) return 'markup';
-  if(/margin|gp\b|gross/.test(q)) return 'margin';
-  return fallback;
-}
-function marginFor(pctVal, mode){ const t = pctVal/100; return mode === 'margin' ? t : t/(1+t); }
+const marginFor = (v, mode) => { const t = v/100; return mode === 'margin' ? t : t/(1+t); };
 function findLine(q){
   const qt = toks(q);
   let best = null, bs = 0;
@@ -1018,15 +1083,23 @@ function findLine(q){
   });
   return bs >= 0.34 ? best : null;
 }
-function planWeakestFirst(need, m){
-  const rows = state.lines.map(l => {
-    const now = l.qty * l.price;
-    const cap = l.cost > 0 ? (l.cost/(1-m))*l.qty : now;
-    return {l, now, next: now, cap, m: l.price > 0 ? (l.price - l.cost)/l.price : 0};
+function atListTotals(){
+  let rev = 0, cost = 0, moved = 0;
+  state.lines.forEach(l => {
+    const p = l.list > 0 ? l.list : l.price;
+    if(l.list > 0 && Math.abs(l.list - l.price) > 0.01) moved++;
+    rev += l.qty * p;
+    if(l.cost > 0) cost += l.qty * l.cost;
   });
-  rows.sort((a,b) => a.m - b.m);
+  return {rev, cost, gp: rev - cost, margin: rev > 0 ? (rev - cost)/rev : 0, moved};
+}
+function planToList(need){
+  const rows = state.lines.map(l => {
+    const now = l.qty*l.price;
+    return {l, now, next: now, cap: l.list > 0 ? l.qty*l.list : now};
+  });
   let remain = need - rows.reduce((s,r) => s + r.now, 0);
-  rows.forEach(r => {
+  rows.slice().sort((a,b) => (b.cap-b.now) - (a.cap-a.now)).forEach(r => {
     if(remain <= 0.01) return;
     const head = Math.max(0, r.cap - r.now);
     const take = Math.min(head, remain);
@@ -1035,17 +1108,28 @@ function planWeakestFirst(need, m){
   });
   return {rows, short: Math.max(0, remain)};
 }
+function planWeakestFirst(need, m){
+  const rows = state.lines.map(l => {
+    const now = l.qty*l.price;
+    return {l, now, next: now, cap: l.cost > 0 ? (l.cost/(1-m))*l.qty : now, m: l.price > 0 ? (l.price-l.cost)/l.price : 0};
+  });
+  rows.sort((a,b) => a.m - b.m);
+  let remain = need - rows.reduce((s,r) => s + r.now, 0);
+  rows.forEach(r => {
+    if(remain <= 0.01) return;
+    const take = Math.min(Math.max(0, r.cap - r.now), remain);
+    r.next = r.now + take;
+    remain -= take;
+  });
+  return {rows, short: Math.max(0, remain)};
+}
 function planAccessoriesFirst(need){
-  const rows = state.lines.map(l => ({
-    l, now: l.qty*l.price, next: l.qty*l.price,
-    acc: /^(acc|sp)[-\s]/i.test(l.match ? l.match.n : l.name)
-  }));
+  const rows = state.lines.map(l => ({l, now: l.qty*l.price, next: l.qty*l.price, acc: /^(acc|sp)[-\s]/i.test(l.match ? l.match.n : l.name)}));
   let remain = need - rows.reduce((s,r) => s + r.now, 0);
   rows.filter(r => r.acc).forEach(r => {
     if(remain <= 0.01) return;
-    const take = Math.min(r.now, remain);   // at most double an accessory line
-    r.next = r.now + take;
-    remain -= take;
+    const take = Math.min(r.now, remain);
+    r.next = r.now + take; remain -= take;
   });
   if(remain > 0.01){
     const rest = rows.filter(r => !r.acc);
@@ -1057,51 +1141,71 @@ function planAccessoriesFirst(need){
 function planTable(rows, limit){
   const moved = rows.filter(r => r.next - r.now > 0.5).sort((a,b) => (b.next-b.now) - (a.next-a.now));
   const shown = moved.slice(0, limit || 6);
-  const body = shown.map(r => [
-    (r.l.match ? r.l.match.n : r.l.name),
-    money0(r.now),
-    money0(r.next),
-    '+' + pc((r.next-r.now)/r.now, 0)
-  ]);
-  const t = {head: ['Line', 'Now', 'New', 'Move'], rows: body};
-  return {table: t, more: moved.length - shown.length};
+  return {
+    table: {head: ['Line', 'Now', 'New', 'Move'], rows: shown.map(r => [
+      (r.l.match ? r.l.match.n : r.l.name), money0(r.now), money0(r.next), '+' + pc((r.next-r.now)/r.now, 0)
+    ])},
+    more: moved.length - shown.length
+  };
 }
 const HELP = [
   'if I charge the client 70%, where should I add more?',
   'what margin am I at?',
+  'how far below list price am I?',
   'what if I give 8% discount?',
   'which lines are below target?',
-  'what should I charge for the Belluna washunit at 60%?',
-  'how much discount can I still give?',
-  '1070 * 4 * 1.15'
+  'what should I charge for the Belluna washunit at 60%?'
 ];
 function respond(raw){
   const q = clean(raw).toLowerCase();
   const t = totals();
   const has = state.lines.length > 0 && t.rev > 0;
 
-  // pure arithmetic
   if(/^[\d\s.,+\-*/()%x×÷]+$/.test(q) || /^(what(?:'s| is)|calculate|compute|=)\b/.test(q)){
     const r = evalExpr(q);
     if(r){ bot([{lead: money(r.v)}, {formula: r.s + ' = ' + money(r.v)}]); return; }
   }
-  if(!has && !/help|what can you/.test(q)){
-    bot([{lead: 'No quote loaded yet.'}, {p: 'Drop the Zoho PDF (or paste the lines) and I can work the numbers on it. I can still do plain arithmetic meanwhile — try "1070 * 4 * 1.15".'}]);
+  if(!has){
+    bot([{lead: 'No quote loaded yet.'},
+         {p: 'Drop the Zoho PDF, or paste the lines, and I will cost every one of them. Plain arithmetic works meanwhile — try “1070 * 4 * 1.15”.'}]);
     return;
   }
 
   const pct0 = askedPercent(q);
-  const mode = askedMode(q, state.mode);
+  const mode = /mark ?up/.test(q) ? 'markup' : (/margin|gp\b|gross/.test(q) ? 'margin' : state.mode);
   const m = pct0 !== null ? marginFor(pct0, mode) : targetFraction();
   const label = pct0 !== null ? (pct0 + '% ' + (mode === 'margin' ? 'margin' : 'markup')) : (state.target + '% ' + state.mode);
   const need = t.cost/(1-m);
   const gap = need - t.rev;
   const ambiguity = (pct0 !== null && mode === 'margin' && !/margin/.test(q))
-    ? {p: 'Read as gross margin (profit ÷ selling price). If you meant ' + pct0 + '% markup on cost, that is only ' + pc(marginFor(pct0,'markup')) + ' margin — say "markup" and I will redo it.'}
+    ? {p: 'Read as gross margin (profit ÷ selling price). If you meant ' + pct0 + '% markup on cost, that is ' + pc(marginFor(pct0,'markup')) + ' margin — say “markup” and I will redo it.'}
     : null;
   const missingNote = t.missing > 0 ? {p: t.missing + ' line(s) still have no cost, so these figures flatter the quote until you fill them in.'} : null;
 
-  // where to add
+  /* list price questions */
+  if(/list price|list|company price|standard price|rate card/.test(q) && !/where|add more/.test(q)){
+    if(t.list <= 0){
+      bot([{lead: 'No selling prices loaded for these lines.'},
+           {p: 'Load the company price PDF with “Load price PDF” at the top, and every line gets a list price and an off-list figure.'}]);
+      return;
+    }
+    const al = atListTotals();
+    const below = state.lines.filter(l => l.list > 0 && l.price < l.list - 0.01)
+      .map(l => ({l, off: (l.list - l.price)/l.list}))
+      .sort((a,b) => b.off - a.off);
+    bot([
+      {lead: t.offList > 0.0001 ? pc(t.offList) + ' below company list price.' : t.offList < -0.0001 ? pc(-t.offList) + ' above list price.' : 'Quoted exactly at list price.'},
+      {p: 'At list this quote would be AED ' + money0(t.list) + '. You are quoting AED ' + money0(t.rev) + ' — a difference of AED ' + money0(t.list - t.rev) + '. Quoting everything at list gives ' + pc(al.margin) + ' margin, against ' + pc(t.margin) + ' now.'},
+      below.length ? {table: {head: ['Line', 'List', 'Quoted', 'Off'], rows: below.slice(0,7).map(r => [
+        (r.l.match ? r.l.match.n : r.l.name), money0(r.l.list), money0(r.l.price), '−' + pc(r.off,0)
+      ])}} : {p: 'No line is below its list price.'},
+      below.length > 7 ? {p: '…and ' + (below.length-7) + ' more below list.'} : null,
+      {formula: 'off list = (list − quoted) ÷ list = (' + money0(t.list) + ' − ' + money0(t.listed) + ') ÷ ' + money0(t.list) + ' = ' + pc(t.offList)}
+    ]);
+    return;
+  }
+
+  /* where to add */
   if(/where|which line|which item|add more|add on|increase|bump|push|top up|make up|adjust/.test(q) && !/below|weak|worst|thin|losing|loss\b/.test(q) && (pct0 !== null || /target/.test(q))){
     if(gap <= 0.5){
       bot([{lead: 'Nothing to add — you are already at ' + pc(t.margin) + '.'},
@@ -1109,25 +1213,35 @@ function respond(raw){
            ambiguity]);
       return;
     }
-    const weak = planWeakestFirst(need, m);
-    const pt = planTable(weak.rows);
-    const acc = planAccessoriesFirst(need);
-    const accMoved = acc.rows.filter(r => r.acc && r.next - r.now > 0.5).length;
-    const factor = need/t.rev;
-    bot([
-      {lead: 'Short by AED ' + money0(gap) + ' to reach ' + label + '.'},
-      {p: 'Cheapest place to find it: the thin lines. Raising these to ' + pc(m) + ' each covers the gap — the rest of the quote never changes, so the client sees fewer moved numbers.'},
-      pt.table.rows.length ? {table: pt.table} : {p: 'No line has room to move at that target.'},
-      pt.more > 0 ? {p: '…and ' + pt.more + ' more line(s) in the same plan.'} : null,
-      weak.short > 1 ? {p: 'AED ' + money0(weak.short) + ' of the gap cannot be placed — those lines have no cost on file, so I cannot price them to a margin.'} : null,
-      {p: 'Two other ways: spread it evenly (multiply every line by ' + factor.toFixed(4) + ', i.e. +' + pc(factor-1) + ' across the board), or load it onto the ' + accMoved + ' accessory / spare line(s) first, where clients rarely benchmark the price.'},
-      {formula: 'need = cost ÷ (1 − margin) = ' + money0(t.cost) + ' ÷ ' + (1-m).toFixed(4) + ' = ' + money0(need) + '\ngap  = need − quoted = ' + money0(need) + ' − ' + money0(t.rev) + ' = ' + money0(gap)},
-      ambiguity, missingNote
-    ]);
+    const al = atListTotals();
+    const listRoom = t.list > 0 ? Math.max(0, t.list - t.rev) : 0;
+    const parts = [{lead: 'Short by AED ' + money0(gap) + ' to reach ' + label + '.'}];
+    if(listRoom > 1){
+      const pl = planToList(need);
+      const pt = planTable(pl.rows);
+      parts.push({p: 'Start with the company list price — the easiest raise to defend. Bringing these lines back to list adds AED ' + money0(Math.min(listRoom, gap)) + (listRoom >= gap ? ', which covers the whole gap.' : ', taking the quote to ' + pc(al.margin) + ' margin.')});
+      parts.push({table: pt.table});
+      if(pt.more > 0) parts.push({p: '…and ' + pt.more + ' more line(s) in the same plan.'});
+      if(pl.short > 1) parts.push({p: 'Even with every line at list you are still AED ' + money0(pl.short) + ' short of ' + label + '. That last part has to come from pricing above list, or from a lower cost.'});
+    }else{
+      const weak = planWeakestFirst(need, m);
+      const pt = planTable(weak.rows);
+      parts.push({p: t.list > 0 ? 'Every line is already at or above list price, so the gap has to come from the thin lines. Raising these to ' + pc(m) + ' each covers it.'
+                                : 'Cheapest place to find it: the thin lines. Raising these to ' + pc(m) + ' each covers the gap, and the rest of the quote never moves.'});
+      parts.push(pt.table.rows.length ? {table: pt.table} : {p: 'No line has room to move at that target.'});
+      if(pt.more > 0) parts.push({p: '…and ' + pt.more + ' more line(s) in the same plan.'});
+      if(weak.short > 1) parts.push({p: 'AED ' + money0(weak.short) + ' of the gap cannot be placed — those lines have no cost on file.'});
+    }
+    const acc = planAccessoriesFirst(need).rows.filter(r => r.acc && r.next - r.now > 0.5).length;
+    parts.push({p: 'Two other ways: spread it evenly (every line × ' + (need/t.rev).toFixed(4) + ', +' + pc(need/t.rev - 1) + ' across the board), or load it onto the ' + acc + ' accessory / spare line(s) first, where clients rarely benchmark the price.'});
+    parts.push({formula: 'need = cost ÷ (1 − margin) = ' + money0(t.cost) + ' ÷ ' + (1-m).toFixed(4) + ' = ' + money0(need) + '\ngap  = need − quoted = ' + money0(need) + ' − ' + money0(t.rev) + ' = ' + money0(gap)});
+    parts.push(ambiguity);
+    parts.push(missingNote);
+    bot(parts);
     return;
   }
 
-  // discount
+  /* discount */
   if(/discount|reduce|drop|lower|cut|off\b|nego/.test(q)){
     const pctIsTarget = pct0 !== null && /(stay|keep|hold|maintain|remain)\b|margin|mark ?up|target/.test(q);
     const tgtM = pctIsTarget ? m : targetFraction();
@@ -1140,52 +1254,52 @@ function respond(raw){
       const newRev = dp !== null ? t.rev*(1-dp) : t.rev - amt;
       const newM = newRev > 0 ? (newRev - t.cost)/newRev : 0;
       bot([
-        {lead: (dp !== null ? pc(dp,0) + ' off' : 'AED ' + money0(amt) + ' off') + ' → margin ' + pc(newM) + ' (from ' + pc(t.margin) + ')'},
-        {p: 'Quote drops to AED ' + money0(newRev) + ' against AED ' + money0(t.cost) + ' of cost. Gross profit ' + money0(newRev - t.cost) + '.'},
+        {lead: (dp !== null ? pc(dp,0) + ' off' : 'AED ' + money0(amt) + ' off') + ' → margin ' + pc(newM) + ', from ' + pc(t.margin) + '.'},
+        {p: 'The quote drops to AED ' + money0(newRev) + ' against AED ' + money0(t.cost) + ' of cost, so gross profit is AED ' + money0(newRev - t.cost) + '.'},
+        t.list > 0 ? {p: 'That also puts you ' + pc((t.list - newRev)/t.list) + ' below company list price.'} : null,
         {p: room > 0 ? 'Your floor at ' + dLabel + ' is AED ' + money0(dNeed) + ', so the most you can give away is AED ' + money0(room) + ' (' + pc(room/t.rev) + ').'
-                     : 'You are already ' + money0(-room) + ' below the ' + dLabel + ' floor of AED ' + money0(dNeed) + ', so any discount takes it further under target.'},
+                     : 'You are already AED ' + money0(-room) + ' below the ' + dLabel + ' floor of AED ' + money0(dNeed) + ', so any discount takes it further under target.'},
         {formula: 'margin = (quote − cost) ÷ quote = (' + money0(newRev) + ' − ' + money0(t.cost) + ') ÷ ' + money0(newRev) + ' = ' + pc(newM)}
       ]);
       return;
     }
     bot([
       {lead: room > 0 ? 'You can give up to AED ' + money0(room) + ' — ' + pc(room/t.rev) + '.' : 'No discount room: the quote is already under ' + dLabel + '.'},
-      {p: room > 0 ? 'That holds ' + dLabel + ' exactly (floor AED ' + money0(dNeed) + ' against AED ' + money0(t.cost) + ' cost). Anything beyond it eats into target.'
-                   : 'To sit at ' + dLabel + ' the quote would have to be AED ' + money0(dNeed) + ', and you are quoting AED ' + money0(t.rev) + '. Raise the quote by AED ' + money0(-room) + ' before you talk about discount.'},
+      {p: room > 0 ? 'That holds ' + dLabel + ' exactly: floor AED ' + money0(dNeed) + ' against AED ' + money0(t.cost) + ' of cost. Anything beyond it eats into target.'
+                   : 'To sit at ' + dLabel + ' the quote would have to be AED ' + money0(dNeed) + ' and you are quoting AED ' + money0(t.rev) + '. Raise the quote by AED ' + money0(-room) + ' before you talk about discount.'},
       {formula: 'floor = cost ÷ (1 − margin) = ' + money0(t.cost) + ' ÷ ' + (1-tgtM).toFixed(4) + ' = ' + money0(dNeed) + '\nroom  = quoted − floor = ' + money0(t.rev) + ' − ' + money0(dNeed) + ' = ' + money0(room)},
       ambiguity
     ]);
     return;
   }
 
-  // per-item price to hit a margin
+  /* one item */
   const line = findLine(q);
   if(line && (pct0 !== null || /price|charge|sell|quote/.test(q))){
     if(line.cost <= 0){
-      bot([{lead: 'No cost on file for that line.'}, {p: '"' + line.name + '" is not matched to the price list. Use ⇄ on the line to pick the right item, or type the unit cost in, and ask me again.'}]);
+      bot([{lead: 'No cost on file for that line.'},
+           {p: '“' + line.name + '” is not matched to the price list. Use ⇄ on the line to pick the right item, or type the unit cost in, then ask me again.'}]);
       return;
     }
     const want = line.cost/(1-m);
     const nowM = (line.price - line.cost)/line.price;
     bot([
       {lead: 'AED ' + money(want) + ' a unit for ' + pc(m) + '.'},
-      {p: (line.match ? line.match.n : line.name) + ' costs AED ' + money(line.cost) + '. You are quoting AED ' + money(line.price) + ' — that is ' + pc(nowM) + '. At ' + pc(m) + ' the line goes from AED ' + money0(line.qty*line.price) + ' to AED ' + money0(line.qty*want) + ' for ' + line.qty + ' unit(s).'},
+      {p: (line.match ? line.match.n : line.name) + ' costs AED ' + money(line.cost) + '. You are quoting AED ' + money(line.price) + ', which is ' + pc(nowM) + '. At ' + pc(m) + ' the line goes from AED ' + money0(line.qty*line.price) + ' to AED ' + money0(line.qty*want) + ' for ' + line.qty + ' unit(s).'},
+      line.list > 0 ? {p: 'Company list price is AED ' + money(line.list) + ', so ' + (want > line.list ? 'that is AED ' + money(want - line.list) + ' above list — you would need approval.' : 'that is still within list.') } : null,
       {formula: 'price = cost ÷ (1 − margin) = ' + money(line.cost) + ' ÷ ' + (1-m).toFixed(4) + ' = ' + money(want)},
       ambiguity
     ]);
     return;
   }
 
-  // weak lines
-  if(/below|weak|worst|thin|losing|loss|red|risk|bad/.test(q)){
-    const rows = state.lines.filter(l => l.cost > 0).map(l => {
-      const lm = (l.price - l.cost)/l.price;
-      return {l, lm, needP: l.cost/(1-m)};
-    }).filter(r => r.lm < m).sort((a,b) => a.lm - b.lm);
+  /* weak lines */
+  if(/below|weak|worst|thin|losing|loss|red|risk/.test(q)){
+    const rows = state.lines.filter(l => l.cost > 0).map(l => ({l, lm: (l.price-l.cost)/l.price, needP: l.cost/(1-m)})).filter(r => r.lm < m).sort((a,b) => a.lm - b.lm);
     if(!rows.length){ bot([{lead: 'Every costed line is at or above ' + pc(m) + '.'}, missingNote]); return; }
     bot([
       {lead: rows.length + ' line(s) sit below ' + pc(m) + '.'},
-      {table: {head: ['Line', 'Margin', 'Price now', 'At target'], rows: rows.slice(0,7).map(r => [
+      {table: {head: ['Line', 'Margin', 'Now', 'At target'], rows: rows.slice(0,7).map(r => [
         (r.l.match ? r.l.match.n : r.l.name), pc(r.lm,0), money0(r.l.price), money0(r.needP)
       ])}},
       rows.length > 7 ? {p: '…and ' + (rows.length-7) + ' more.'} : null,
@@ -1195,24 +1309,25 @@ function respond(raw){
     return;
   }
 
-  // markup / margin conversion
+  /* markup vs margin */
   if(/mark ?up/.test(q) && /margin/.test(q)){
-    const rowsC = [30,40,50,60,70,100,150].map(x => [x + '% markup', pc(marginFor(x,'markup'),1)]);
     bot([
       {lead: 'Markup and margin are not the same number.'},
       {p: 'This quote runs ' + pc(t.markup) + ' markup on cost, which is ' + pc(t.margin) + ' margin.'},
-      {table: {head: ['On cost', 'Is margin'], rows: rowsC}},
+      {table: {head: ['On cost', 'Is margin'], rows: [30,40,50,60,70,100,150].map(x => [x + '% markup', pc(marginFor(x,'markup'))])}},
       {formula: 'margin = markup ÷ (1 + markup)   ·   markup = margin ÷ (1 − margin)'}
     ]);
     return;
   }
 
-  // status / anything else with data
+  /* status */
   if(/margin|status|how (am|are)|where (am|do)|summary|total|profit|gp\b|stand/.test(q) || pct0 !== null){
+    const al = atListTotals();
     bot([
       {lead: 'Margin ' + pc(t.margin) + ' — AED ' + money0(t.gp) + ' gross profit.'},
-      {p: 'Quoted AED ' + money0(t.rev) + ' against AED ' + money0(t.cost) + ' of cost across ' + state.lines.length + ' line(s). That is ' + pc(t.markup) + ' markup on cost.'},
-      {p: gap > 0.5 ? 'To reach ' + label + ' the quote needs AED ' + money0(need) + ' — short by AED ' + money0(gap) + ' (+' + pc(gap/t.rev) + ').'
+      {p: 'Quoted AED ' + money0(t.rev) + ' against AED ' + money0(t.cost) + ' of cost across ' + state.lines.length + ' line(s), which is ' + pc(t.markup) + ' markup on cost.'},
+      t.list > 0 ? {p: 'Company list for the same lines is AED ' + money0(t.list) + ' — you are ' + (t.offList > 0 ? pc(t.offList) + ' below it. At full list the quote would run ' + pc(al.margin) + ' margin.' : pc(-t.offList) + ' above it.')} : null,
+      {p: gap > 0.5 ? 'To reach ' + label + ' the quote needs AED ' + money0(need) + ' — short by AED ' + money0(gap) + ', or +' + pc(gap/t.rev) + '.'
                     : 'That clears ' + label + ' by AED ' + money0(-gap) + '.'},
       {formula: 'margin = (quote − cost) ÷ quote = (' + money0(t.rev) + ' − ' + money0(t.cost) + ') ÷ ' + money0(t.rev) + ' = ' + pc(t.margin)},
       ambiguity, missingNote
@@ -1220,36 +1335,52 @@ function respond(raw){
     return;
   }
 
-  bot([
-    {lead: 'Ask me in numbers and I will answer in numbers.'},
-    {p: 'Things I work out from the loaded quote: ' + HELP.slice(0,6).map(h => '“' + h + '”').join(', ') + '. Plain arithmetic works too.'}
-  ]);
+  bot([{lead: 'Ask me in numbers and I will answer in numbers.'},
+       {p: 'From the loaded quote I can work out: ' + HELP.slice(0,5).map(h => '“' + h + '”').join(', ') + '. Plain arithmetic works too.'}]);
 }
 
 /* ---------- events ---------- */
 function setStatus(msg, cls){ const s = $('status'); s.textContent = msg; s.className = 'status' + (cls ? ' ' + cls : ''); }
 
-async function handleFile(f){
+async function readPdf(f){
+  const buf = await f.arrayBuffer();
+  return await pdfToLines(buf);
+}
+async function handleQuote(f){
   if(!f) return;
   if(!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf'){ setStatus('That is not a PDF. Export the quote from Zoho as PDF, or paste the lines instead.', 'err'); return; }
   setStatus('Reading ' + f.name + '…');
   try{
-    const buf = await f.arrayBuffer();
-    const lines = await pdfToLines(buf);
+    const lines = await readPdf(f);
     const meta = (lines.find(l => /quote\s*#|estimate\s*#|qt-|est-/i.test(l)) || '').slice(0, 60);
     const parsed = parseTextLines(lines);
     if(!parsed.length){
-      setStatus('Could not read line items from that PDF — it may be a scan or an image. Paste the quote text instead and I will read it from there.', 'err');
+      setStatus('Could not read line items from that PDF — it may be a scan. Paste the quote text instead and I will read it from there.', 'err');
       $('pasteBox').classList.add('open');
       return;
     }
     state.meta = meta ? clean(meta) : f.name.replace(/\.pdf$/i, '');
     addLines(parsed);
     const t = totals();
-    setStatus('Read ' + parsed.length + ' line(s) from ' + f.name + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all matched to the price list'), t.missing ? '' : 'ok');
+    setStatus('Read ' + parsed.length + ' line(s) from ' + f.name + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all costed'), t.missing ? '' : 'ok');
   }catch(e){
     setStatus('That PDF could not be read in the browser. Paste the quote text instead.', 'err');
     $('pasteBox').classList.add('open');
+  }
+}
+async function handleList(f){
+  if(!f) return;
+  setStatus('Reading the selling-price list…');
+  try{
+    const lines = await readPdf(f);
+    const pairs = parsePriceLines(lines);
+    if(!pairs.length){ setStatus('No prices found in that PDF. Paste the list instead — one item and price per line.', 'err'); $('pasteListBox').classList.add('open'); return; }
+    state.listSource = f.name;
+    const n = applyPriceList(pairs);
+    setStatus('Loaded ' + n + ' selling prices from ' + f.name + '.', 'ok');
+  }catch(e){
+    setStatus('That price PDF could not be read. Paste the list instead.', 'err');
+    $('pasteListBox').classList.add('open');
   }
 }
 const drop = $('drop');
@@ -1257,21 +1388,29 @@ drop.addEventListener('click', () => $('file').click());
 drop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } });
 ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
 ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
-drop.addEventListener('drop', e => { const f = e.dataTransfer.files && e.dataTransfer.files[0]; handleFile(f); });
-$('file').addEventListener('change', e => handleFile(e.target.files[0]));
+drop.addEventListener('drop', e => handleQuote(e.dataTransfer.files && e.dataTransfer.files[0]));
+$('file').addEventListener('change', e => handleQuote(e.target.files[0]));
+$('loadList').addEventListener('click', () => $('listFile').click());
+$('listFile').addEventListener('change', e => handleList(e.target.files[0]));
 
 $('pasteToggle').addEventListener('click', () => $('pasteBox').classList.toggle('open'));
+$('pasteListToggle').addEventListener('click', () => $('pasteListBox').classList.toggle('open'));
 $('parsePaste').addEventListener('click', () => {
-  const txt = $('pasteText').value;
-  const parsed = parseTextLines(txt.split(/\r?\n/).map(l => l.replace(/\t/g, '  ')));
-  if(!parsed.length){ setStatus('No item lines found in that text. Each line needs a name and at least a price and an amount.', 'err'); return; }
+  const parsed = parseTextLines($('pasteText').value.split(/\r?\n/).map(l => l.replace(/\t/g, '  ')));
+  if(!parsed.length){ setStatus('No item lines found in that text. Each line needs a name, a qty and a price.', 'err'); return; }
   state.meta = 'pasted';
   addLines(parsed);
   const t = totals();
-  setStatus('Read ' + parsed.length + ' line(s) from the pasted text' + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all matched'), t.missing ? '' : 'ok');
+  setStatus('Read ' + parsed.length + ' line(s) from the pasted text' + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all costed'), t.missing ? '' : 'ok');
+});
+$('parseList').addEventListener('click', () => {
+  const pairs = parsePriceLines($('pasteListText').value.split(/\r?\n/).map(l => l.replace(/\t/g, '  ')));
+  if(!pairs.length){ setStatus('No prices found in that text. Each line needs an item name and a price.', 'err'); return; }
+  state.listSource = 'pasted text';
+  setStatus('Loaded ' + applyPriceList(pairs) + ' selling prices.', 'ok');
 });
 $('addRow').addEventListener('click', () => {
-  state.lines.push({id: ++uid, name: 'New line', qty: 1, price: 0, cost: 0, match: null, kind: 'none', costEdited: false});
+  state.lines.push({id: ++uid, name: 'New line', qty: 1, price: 0, cost: 0, list: 0, match: null, kind: 'none', costEdited: false, fallback: false});
   render();
   const last = $('rows').lastElementChild;
   if(last){ last.scrollIntoView({block:'nearest'}); last.querySelector('[data-k="price"]').focus(); }
@@ -1280,30 +1419,45 @@ $('addRow').addEventListener('click', () => {
 $('clear').addEventListener('click', () => {
   state.lines = []; state.meta = '';
   render();
-  setStatus('Cleared.');
+  setStatus('Cleared. The selling-price list stays loaded.');
 });
 $('demo').addEventListener('click', () => {
+  const sample = [
+    {name: 'PR-Kiela-Washunit-Belluna Washunit-Chrome Structure', qty: 2, price: 8900, list: 11900},
+    {name: 'PR-Comfortel-Styling Chair-Blake Top-Black', qty: 6, price: 890, list: 1150},
+    {name: 'PR-Nelson-Stool-Iron', qty: 4, price: 1450, list: 1950},
+    {name: 'PR-Comfortel-Trolley-Mova', qty: 2, price: 2100, list: 2850},
+    {name: 'SP-Comfortel-Styling Chair-Capital Star Base-Chrome', qty: 6, price: 260, list: 320},
+    {name: 'ACC-Buce-Headrest', qty: 6, price: 140, list: 190}
+  ];
+  if(!state.listCount){
+    state.listSource = 'the sample quote';
+    const map = {};
+    sample.forEach(s => { map[norm(s.name)] = s.list; });
+    state.listPrices = map;
+    state.listCount = sample.length;
+    paintListState();
+  }
   state.meta = 'sample quote';
-  addLines([
-    {name: 'PR-Kiela-Washunit-Belluna Washunit-Chrome Structure', qty: 2, price: 8900},
-    {name: 'PR-Comfortel-Styling Chair-Blake Top-Black', qty: 6, price: 890},
-    {name: 'PR-Nelson-Stool-Iron', qty: 4, price: 1450},
-    {name: 'PR-Comfortel-Trolley-Mova', qty: 2, price: 2100},
-    {name: 'SP-Comfortel-Styling Chair-Capital Star Base-Chrome', qty: 6, price: 260},
-    {name: 'ACC-Buce-Headrest', qty: 6, price: 140}
-  ]);
-  setStatus('Sample quote loaded — six real price-list items with made-up selling prices.', 'ok');
+  addLines(sample.map(s => ({name: s.name, qty: s.qty, price: s.price})));
+  setStatus('Sample quote loaded — six real price-list items with made-up selling prices, so you can see how it reads.', 'ok');
 });
-$('basisSeg').addEventListener('click', e => {
+$('modeSeg').addEventListener('click', e => {
   const b = e.target.closest('button');
   if(!b) return;
-  state.basis = b.dataset.basis;
-  Array.from($('basisSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  state.lines.forEach(l => { if(!l.costEdited) l.cost = unitCost(l.match, state.basis); });
-  render();
+  state.mode = b.dataset.mode;
+  Array.from($('modeSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  updateAll();
 });
-$('targetVal').addEventListener('input', () => { state.target = parseFloat($('targetVal').value) || 0; updateAll(); });
-$('targetMode').addEventListener('change', () => { state.mode = $('targetMode').value; updateAll(); });
+function setTarget(v){
+  state.target = Math.max(0, Math.min(99, v));
+  $('targetVal').value = state.target;
+  updateAll();
+}
+$('targetVal').addEventListener('input', () => { const v = parseFloat($('targetVal').value); if(isFinite(v)) { state.target = Math.max(0, Math.min(99, v)); updateAll(); } });
+$('targetVal').addEventListener('blur', () => setTarget(parseFloat($('targetVal').value) || 0));
+$('tUp').addEventListener('click', () => setTarget((parseFloat($('targetVal').value) || 0) + 1));
+$('tDown').addEventListener('click', () => setTarget((parseFloat($('targetVal').value) || 0) - 1));
 $('askForm').addEventListener('submit', e => {
   e.preventDefault();
   const v = clean($('askInput').value);
@@ -1323,13 +1477,16 @@ async function capUse(n){ try{ return (window.claude && window.claude.use) ? awa
 $('export').addEventListener('click', async () => {
   const t = totals();
   const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
-  const rows = [['Item (quote)', 'Price-list item', 'Match', 'Qty', 'Unit price', 'Line total', 'Unit cost', 'Line cost', 'Gross profit', 'Margin %']];
+  const rows = [['Item (quote)', 'Price-list item', 'Match', 'Qty', 'List price', 'Quoted price', 'Off list %', 'Line total', 'Unit cost', 'Line cost', 'Gross profit', 'Margin %']];
   state.lines.forEach(l => {
     const rev = l.qty*l.price, c = l.qty*l.cost;
-    rows.push([l.name, l.match ? l.match.n : '', l.kind, l.qty, l.price.toFixed(2), rev.toFixed(2), l.cost.toFixed(2), c.toFixed(2), (rev-c).toFixed(2), rev > 0 ? ((rev-c)/rev*100).toFixed(1) : '']);
+    rows.push([l.name, l.match ? l.match.n : '', l.kind, l.qty,
+      l.list ? l.list.toFixed(2) : '', l.price.toFixed(2),
+      l.list ? (((l.list-l.price)/l.list)*100).toFixed(1) : '',
+      rev.toFixed(2), l.cost.toFixed(2), c.toFixed(2), (rev-c).toFixed(2), rev > 0 ? ((rev-c)/rev*100).toFixed(1) : '']);
   });
   rows.push([]);
-  rows.push(['TOTAL', '', '', '', '', t.rev.toFixed(2), '', t.cost.toFixed(2), t.gp.toFixed(2), (t.margin*100).toFixed(1)]);
+  rows.push(['TOTAL', '', '', '', t.list ? t.list.toFixed(2) : '', '', t.list ? (t.offList*100).toFixed(1) : '', t.rev.toFixed(2), '', t.cost.toFixed(2), t.gp.toFixed(2), (t.margin*100).toFixed(1)]);
   const csv = rows.map(r => r.map(esc).join(',')).join('\r\n');
   const dl = await capUse('downloads');
   if(!dl){ setStatus('Saving files is not available in this view — copy the table instead.', 'err'); return; }
@@ -1338,26 +1495,22 @@ $('export').addEventListener('click', async () => {
     setStatus('Margin sheet saved.', 'ok');
   }catch(err){
     if(err && err.code === 'extension_not_enabled'){
-      try{ await dl.save({filename: 'quote-margin.txt', data: csv}); setStatus('Saved as .txt — rename to .csv to open in Excel.', 'ok'); return; }catch(e2){}
+      try{ await dl.save({filename: 'quote-margin.txt', data: csv}); setStatus('Saved as .txt — rename it to .csv to open in Excel.', 'ok'); return; }catch(e2){}
     }
     if(err && err.code === 'declined') return;
     setStatus('Could not save the file.', 'err');
   }
 });
-(async () => { const dl = await capUse('downloads'); if(!dl && state.lines.length) $('export').hidden = true; })();
 
 /* ---------- boot ---------- */
-if(restore()){
-  $('targetVal').value = state.target;
-  $('targetMode').value = state.mode;
-  Array.from($('basisSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x.dataset.basis === state.basis)));
-  render();
-  setStatus('Picked up where you left off — ' + state.lines.length + ' line(s) from your last quote.');
-}else{
-  render();
-}
+const had = restore();
+$('targetVal').value = state.target;
+Array.from($('modeSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === state.mode)));
+paintListState();
+render();
+if(had && state.lines.length) setStatus('Picked up where you left off — ' + state.lines.length + ' line(s) from your last quote.');
 bot([
   {lead: 'Margin desk ready.'},
-  {p: 'Drop a Zoho quote PDF and I will cost every line against the 25 Aug price list. Then ask me anything with a number in it — target margins, discounts, where to move price, or plain arithmetic.'}
+  {p: 'Drop a Zoho quote PDF and every line is costed against the 25 Aug COGS list and checked against the company selling price. Then ask me anything with a number in it — target margins, discounts, where to move price, or plain arithmetic.'}
 ]);
 </script>
