@@ -1,0 +1,1363 @@
+<title>HBN Quote Margin Desk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --bg:#F2F5F4; --surface:#FFFFFF; --surface-2:#E9EEEC; --raise:0 1px 2px rgba(18,28,26,.06),0 8px 24px rgba(18,28,26,.05);
+  --line:#D6DFDC; --line-strong:#B4C3BF;
+  --ink:#121C1A; --muted:#5B6B67;
+  --accent:#0E5A54; --accent-ink:#FFFFFF; --accent-soft:#DBEAE6;
+  --good:#186B43; --good-soft:#DDEFE4;
+  --warn:#8A5A0C; --warn-soft:#F4E8CF;
+  --bad:#9E2A20; --bad-soft:#F4DEDB;
+  --grid:rgba(18,28,26,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1413; --surface:#151E1C; --surface-2:#1C2725; --raise:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    --line:#26332F; --line-strong:#3A4A46;
+    --ink:#E6EEEB; --muted:#8FA19C;
+    --accent:#4FD0BC; --accent-ink:#06201C; --accent-soft:#123430;
+    --good:#5AC98C; --good-soft:#12301F;
+    --warn:#DFAE5C; --warn-soft:#33270F;
+    --bad:#EE857A; --bad-soft:#361A17;
+    --grid:rgba(230,238,235,.07);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1413; --surface:#151E1C; --surface-2:#1C2725; --raise:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --line:#26332F; --line-strong:#3A4A46;
+  --ink:#E6EEEB; --muted:#8FA19C;
+  --accent:#4FD0BC; --accent-ink:#06201C; --accent-soft:#123430;
+  --good:#5AC98C; --good-soft:#12301F;
+  --warn:#DFAE5C; --warn-soft:#33270F;
+  --bad:#EE857A; --bad-soft:#361A17;
+  --grid:rgba(230,238,235,.07);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.num,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.015em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- header ---------- */
+.top{
+  display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between;
+  padding:26px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px;
+}
+.brand{display:flex;gap:14px;align-items:center}
+.mark{
+  display:grid;place-items:center;width:46px;height:46px;flex:none;border-radius:11px;
+  background:var(--accent);color:var(--accent-ink);
+  font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;
+}
+.top h1{font-size:26px;font-weight:700}
+.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+.sub b{color:var(--ink);font-weight:600}
+
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+.seg button{
+  border:0;background:transparent;padding:6px 12px;border-radius:6px;cursor:pointer;
+  font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.01em;
+}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg-label{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:20px;align-items:start}
+@media (max-width:1020px){.shell{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:22px;min-width:0}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--raise)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.card-hd h2{font-size:15px;font-weight:600;letter-spacing:.01em}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- intake ---------- */
+.intake{padding:18px}
+.drop{
+  border:1.5px dashed var(--line-strong);border-radius:12px;background:var(--surface-2);
+  padding:26px 20px;text-align:center;cursor:pointer;transition:border-color .15s;
+}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop h3{font-size:16px;font-weight:600}
+.drop p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.intake-alt{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{
+  border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;padding:8px 13px;
+  font-size:13px;font-weight:600;cursor:pointer;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn-primary:hover{color:var(--accent-ink);filter:brightness(1.08)}
+.paste-box{margin-top:12px;display:none}
+.paste-box.open{display:block}
+.paste-box textarea{
+  width:100%;min-height:130px;resize:vertical;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:10px;padding:11px 12px;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.55;
+}
+.status{margin:12px 0 0;font-size:12.5px;color:var(--muted);min-height:1.2em}
+.status.err{color:var(--bad)}
+.status.ok{color:var(--good)}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--surface);padding:15px 16px 16px}
+.stat .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:24px;font-weight:600;margin-top:7px;letter-spacing:-.02em}
+.stat .n{font-size:12px;color:var(--muted);margin-top:3px}
+.stat.hero{background:var(--accent-soft)}
+.stat.hero .v{color:var(--accent)}
+.gauge{height:5px;border-radius:3px;background:var(--surface-2);margin-top:10px;overflow:hidden}
+.gauge i{display:block;height:100%;background:var(--accent);width:0}
+
+/* ---------- table ---------- */
+.tbl-scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:742px}
+th,td{padding:9px 7px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0;z-index:1;
+}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:168px;padding-left:14px}
+tbody tr:hover{background:var(--surface-2)}
+td.item{font-size:13px;line-height:1.35}
+.itemname{font-weight:600}
+.matchline{display:flex;align-items:center;gap:6px;margin-top:4px}
+.chip{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;
+  padding:2px 6px;border-radius:5px;text-transform:uppercase;font-weight:500;
+}
+.chip.exact{background:var(--good-soft);color:var(--good)}
+.chip.close{background:var(--warn-soft);color:var(--warn)}
+.chip.none{background:var(--bad-soft);color:var(--bad)}
+.chip.manual{background:var(--accent-soft);color:var(--accent)}
+.matchname{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:118px}
+select.remap{
+  max-width:100%;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:6px;padding:3px 5px;color:var(--muted);
+}
+td input.cell{
+  width:96px;text-align:right;background:transparent;border:1px solid transparent;border-radius:6px;
+  padding:5px 6px;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;
+}
+td input.cell:hover{border-color:var(--line)}
+td input.cell:focus{border-color:var(--accent);background:var(--surface-2);outline:none}
+td input.cell.qty{width:54px}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px}
+td.gp{font-weight:600}
+.band{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
+.band::before{content:"";width:3px;height:15px;border-radius:2px;background:currentColor}
+.band.good{color:var(--good)}.band.warn{color:var(--warn)}.band.bad{color:var(--bad)}
+.rm{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:4px 6px;border-radius:6px}
+.rm:hover{color:var(--bad);background:var(--bad-soft)}
+tfoot td{border-top:2px solid var(--line-strong);border-bottom:0;font-weight:700;font-family:"IBM Plex Mono",monospace;padding-top:12px;padding-bottom:14px}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:13.5px}
+
+.notice{
+  display:block;margin:0;padding:11px 14px;font-size:12.5px;line-height:1.45;
+  background:var(--warn-soft);color:var(--warn);border-bottom:1px solid var(--line);
+}
+.notice[hidden]{display:none}
+[hidden]{display:none!important}
+.notice b{font-weight:600}
+
+/* ---------- advisor ---------- */
+.desk{position:sticky;top:16px;display:flex;flex-direction:column;height:min(780px,calc(100vh - 32px))}
+@media (max-width:1020px){.desk{position:static;height:auto}}
+.target{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface-2);border-radius:0}
+.target-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.target-row input[type="number"]{
+  width:72px;background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;
+  padding:6px 8px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;text-align:right;
+}
+.target-row select{background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;font-size:13px}
+.target-read{margin:10px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.target-read b{color:var(--ink);font-weight:600;font-family:"IBM Plex Mono",monospace}
+.target-read b.up{color:var(--bad)}
+.target-read b.ok{color:var(--good)}
+
+.log{flex:1;min-height:0;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.msg{font-size:13.5px;line-height:1.5}
+.msg.me{align-self:flex-end;max-width:88%;background:var(--accent);color:var(--accent-ink);padding:8px 12px;border-radius:12px 12px 3px 12px}
+.msg.bot{max-width:100%}
+.msg.bot p{margin:0 0 7px}
+.msg.bot p:last-child{margin-bottom:0}
+.msg.bot .lead{font-weight:600}
+.msg.bot .formula{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);
+  background:var(--surface-2);border-left:2px solid var(--line-strong);padding:6px 9px;border-radius:0 6px 6px 0;
+  white-space:pre-wrap;margin:7px 0 0;
+}
+.mini{width:100%;min-width:0;border-collapse:collapse;margin:8px 0 2px;font-size:12px}
+.mini th,.mini td{padding:5px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.mini th{font-size:9.5px;letter-spacing:.08em;position:static;background:transparent}
+.mini td:first-child,.mini th:first-child{text-align:left;white-space:normal;min-width:0;font-size:11.5px;line-height:1.3}
+.mini td.n{font-size:11.5px}
+.mini-wrap{overflow-x:auto}
+.ask{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.ask input{
+  flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;
+}
+.ask input:focus{border-color:var(--accent);outline:none}
+.ask button{border:0;background:var(--accent);color:var(--accent-ink);border-radius:9px;padding:0 14px;font-weight:600;cursor:pointer;font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
+.chips button{
+  border:1px solid var(--line);background:var(--surface-2);border-radius:20px;padding:5px 11px;
+  font-size:11.5px;color:var(--muted);cursor:pointer;
+}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+
+.foot{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6;max-width:78ch}
+.foot b{color:var(--ink);font-weight:600}
+@media (max-width:1020px){.log{min-height:300px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="brand">
+    <span class="mark">HBN</span>
+    <div>
+      <h1>Quote Margin Desk</h1>
+      <p class="sub">Drop a Zoho quote PDF &rarr; see the margin before you send it. Costs from <b>Price List 25 Aug 2026</b> &middot; 122 costed items &middot; AED</p>
+    </div>
+  </div>
+  <div>
+    <span class="seg-label">Cost basis</span>
+    <div class="seg" id="basisSeg">
+      <button data-basis="c" aria-pressed="true">COGS list</button>
+      <button data-basis="i" aria-pressed="false">Inventory list</button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="col">
+
+    <section class="card intake">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload a Zoho quote PDF">
+        <h3>Drop the quote PDF here</h3>
+        <p>Zoho &rarr; Quote &rarr; Export as PDF. Nothing leaves this page &mdash; the file is read in your browser.</p>
+      </div>
+      <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+      <div class="intake-alt">
+        <button class="btn" id="pasteToggle">Paste quote text instead</button>
+        <button class="btn" id="addRow">Add a line manually</button>
+        <button class="btn" id="demo">Load a sample quote</button>
+        <button class="btn" id="clear">Clear</button>
+      </div>
+      <div class="paste-box" id="pasteBox">
+        <textarea id="pasteText" placeholder="Paste the quote lines. One line per item, e.g.&#10;PR-Nelson-Stool-Iron   2   1,450.00   2,900.00&#10;ACC-Buce-Headrest   4   120.00   480.00"></textarea>
+        <div class="intake-alt"><button class="btn btn-primary" id="parsePaste">Read these lines</button></div>
+      </div>
+      <p class="status" id="status">No quote loaded yet.</p>
+    </section>
+
+    <section class="stats" id="stats">
+      <div class="stat"><div class="k">Quoted to client</div><div class="v num" id="sRev">&mdash;</div><div class="n" id="sRevN">0 lines</div></div>
+      <div class="stat"><div class="k">Our cost</div><div class="v num" id="sCost">&mdash;</div><div class="n" id="sCostN">COGS basis</div></div>
+      <div class="stat"><div class="k">Gross profit</div><div class="v num" id="sGp">&mdash;</div><div class="n" id="sGpN">Quote &minus; cost</div></div>
+      <div class="stat hero"><div class="k">Gross margin</div><div class="v num" id="sMargin">&mdash;</div><div class="n" id="sMarginN">Target 70%</div><div class="gauge"><i id="sGauge"></i></div></div>
+    </section>
+
+    <section class="card">
+      <div class="card-hd">
+        <h2>Line items</h2>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="eyebrow" id="lineCount">0 lines</span>
+          <button class="btn" id="export" hidden>Export CSV</button>
+        </div>
+      </div>
+      <p class="notice" id="unmatched" hidden></p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr>
+            <th>Item &amp; cost match</th><th>Qty</th><th>Price</th><th>Line total</th>
+            <th>Unit cost</th><th>Line cost</th><th>Profit</th><th>Margin</th><th></th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+          <tfoot id="foot" hidden><tr>
+            <td>Total</td><td></td><td></td><td class="n" id="fRev"></td>
+            <td></td><td class="n" id="fCost"></td><td class="n" id="fGp"></td><td class="n" id="fMargin"></td><td></td>
+          </tr></tfoot>
+        </table>
+      </div>
+      <div class="empty" id="empty">Load a quote and every line lands here with its cost, profit and margin.</div>
+    </section>
+  </div>
+
+  <aside class="card desk">
+    <div class="card-hd"><h2>Margin advisor</h2><span class="eyebrow">arithmetic desk</span></div>
+    <div class="target">
+      <div class="target-row">
+        <label class="eyebrow" for="targetVal" style="flex:1">Target</label>
+        <input type="number" id="targetVal" value="70" min="0" max="99" step="1">
+        <span class="mono" style="font-size:13px">%</span>
+        <select id="targetMode">
+          <option value="margin">gross margin</option>
+          <option value="markup">markup on cost</option>
+        </select>
+      </div>
+      <p class="target-read" id="targetRead">Load a quote to see the gap to target.</p>
+    </div>
+    <div class="log" id="log"></div>
+    <form class="ask" id="askForm" autocomplete="off">
+      <input id="askInput" placeholder="If I charge 70%, where do I add?">
+      <button type="submit">Ask</button>
+    </form>
+    <div class="chips" id="chips"></div>
+  </aside>
+</div>
+
+<p class="foot">
+  <b>How the cost is found.</b> Each quote line is matched to the price list by item name &mdash; exact first, then closest name. A line that can&rsquo;t be matched shows cost 0 and is excluded from the totals, so the margin you see is never flattered by a missing cost.
+  <b>Margin vs markup.</b> Margin is profit &divide; selling price; markup is profit &divide; cost. 70% markup is only a 41.2% margin &mdash; the advisor always says which one it used.
+  <b>Bands.</b> Margin at or above target reads green, within 10 points below reads amber, further below reads red.
+</p>
+</div>
+
+<script>
+const PRICE = [{"n":"PR-Nelson-Stool-Iron","i":1070.0,"c":995.33,"s":"DIFFERENT"},{"n":"PR-Gharieni-Massage Bed-MLW NEO-","i":23945.92,"c":20192.0,"s":"DIFFERENT"},{"n":"PR-Kiela-Washunit-Belluna Washunit-Chrome Structure","i":6526.0,"c":5965.27,"s":"DIFFERENT"},{"n":"PR-Gharieni-Stool-Oval Seat","i":1187.23,"c":914.23,"s":"DIFFERENT"},{"n":"PR-Kiela-Trolley-Color Trolley","i":612.0,"c":560.14,"s":"DIFFERENT"},{"n":"ACC-Comfortel-Tint Blowdryer Holder-Black","i":79.0,"c":124.0,"s":"DIFFERENT"},{"n":"PR-Nelson-Stool-Nelby","i":410.0,"c":381.21,"s":"DIFFERENT"},{"n":"PR-Kiela-Footrest-Alteq-Chrome","i":198.0,"c":185.58,"s":"DIFFERENT"},{"n":"ACC-Comfortel-Tools/Product Holder-Black","i":79.0,"c":68.49,"s":"DIFFERENT"},{"n":"ACC-Comfortel-Hair Extension Holder-Black","i":79.0,"c":75.0,"s":"DIFFERENT"},{"n":"ACC-Comfortel-Tint Blowdryer Holder-White","i":79.0,"c":75.0,"s":"DIFFERENT"},{"n":"ACC-Comfortel-Tools/Product Holder-White","i":79.0,"c":75.0,"s":"DIFFERENT"},{"n":"ACC-Nelson-Fountain Shower-","i":415.13,"c":387.0,"s":"DIFFERENT"},{"n":"ACC-Nelson-Nelbydro White Tray","i":560.0,"c":1104.0,"s":"DIFFERENT"},{"n":"PR-Buce-Make-up Chair-344F-Electric Base","i":4995.0,"c":5800.0,"s":"DIFFERENT"},{"n":"PR-Buce-Styling Chair-185 Top","i":648.09,"c":1078.0,"s":"DIFFERENT"},{"n":"PR-Buce-Washunit-S274F","i":5439.0,"c":5800.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Barber-Batman Barber-B","i":2473.0,"c":2349.11,"s":"DIFFERENT"},{"n":"PR-Comfortel-Footrest-Supernova-Chrome","i":297.11,"c":190.24,"s":"DIFFERENT"},{"n":"PR-Comfortel-Make-up Chair-Claudia Top","i":2045.25,"c":1336.46,"s":"DIFFERENT"},{"n":"PR-Comfortel-Stool-Superior Salon Stool-Chrome","i":404.0,"c":448.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Styling Chair-Blake Top-Black","i":524.55,"c":520.69,"s":"DIFFERENT"},{"n":"PR-Comfortel-Styling Chair-Chloe Top-B","i":607.05,"c":350.55,"s":"DIFFERENT"},{"n":"PR-Comfortel-Styling Mirror-Verona Arch Salon-Black-Double","i":3416.0,"c":2956.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Trolley-Mova","i":1617.3,"c":1483.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Trolley-Studio 3-Metal-B-","i":1194.86,"c":1258.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Trolley-Studio 3-Metal-Champagne Beige","i":1194.86,"c":1195.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Trolley-Studio 3-Metal-White","i":1194.86,"c":1258.0,"s":"DIFFERENT"},{"n":"PR-Comfortel-Washunit-Hazel Washunit-White Basin-Black","i":3591.0,"c":3823.0,"s":"DIFFERENT"},{"n":"PR-Greiner-Washunit-Rondolore-White","i":8538.75,"c":8064.0,"s":"DIFFERENT"},{"n":"PR-Greiner-Washunit-Tondolore-White Structure","i":9239.17,"c":8172.0,"s":"DIFFERENT"},{"n":"PR-Kiela-Trolley-Cadillac-Stainless Steel-w/o Lock","i":1053.0,"c":934.17,"s":"DIFFERENT"},{"n":"PR-Kiela-Washunit-Vida Wash-Chrome Structure","i":5616.0,"c":4980.84,"s":"DIFFERENT"},{"n":"PR-Nelson-Pedicure Chair-Nelbyhdro-White Basin-B-","i":12033.0,"c":8903.74,"s":"DIFFERENT"},{"n":"PR-Nelson-Washunit-Nelbyspa","i":16389.0,"c":8713.0,"s":"DIFFERENT"},{"n":"SP-Buce-Styling Chair-E31 Base-Chrome","i":1117.4,"c":1210.0,"s":"DIFFERENT"},{"n":"SP-Comfortel-Claudia-Hydraulic Lift & Square Base-Chrome","i":562.5,"c":478.49,"s":"DIFFERENT"},{"n":"SP-Comfortel-Styling Chair-Capital Star Base-Chrome","i":146.25,"c":139.0,"s":"DIFFERENT"},{"n":"SP-Greiner-Styling Chair-Disc Base and Pump-Chrome","i":1300.0,"c":2214.29,"s":"DIFFERENT"},{"n":"SP-Nelson-Styling Chair-Disc Base w/ Pump-CHROME-","i":734.87,"c":625.64,"s":"DIFFERENT"},{"n":"ACC-HOSE-Short Plastic-","i":50.0,"c":null,"s":"Missing in COGS list"},{"n":"PR-Cindarella-Styling Chair-Mademoiselle Top-c/ Fabric-","i":1853.0,"c":null,"s":"Missing in COGS list"},{"n":"PR-Comfortel-Barber-Thor-Tan II","i":2563.0,"c":null,"s":"Missing in COGS list"},{"n":"PR-Comfortel-Massage Bed-Gemini-White","i":4914.09,"c":null,"s":"Missing in COGS list"},{"n":"PR-Comfortel-Stool-Ottaman","i":270.0,"c":null,"s":"Missing in COGS list"},{"n":"PR-Comfortel-Styling Chair-Milo Top-Midnight","i":714.0,"c":null,"s":"Missing in COGS list"},{"n":"PR-Greiner-Washunit-Rondolore-Black","i":8786.25,"c":null,"s":"Missing in COGS list"},{"n":"PR-Nelson-Washunit-Formula Washunit-Black Structure","i":8729.15,"c":null,"s":"Missing in COGS list"},{"n":"ACC-Cindarella-Head Shower-Black","i":0.0,"c":null,"s":"No cost in either"},{"n":"ACC-Cindarella-Head Shower-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"ACC-HBN-Pedicure Square Stool-White","i":0.0,"c":null,"s":"No cost in either"},{"n":"ACC-HBN-Plastic Cover Washunit-","i":0.0,"c":null,"s":"No cost in either"},{"n":"ACC-PING-Small-","i":0.0,"c":null,"s":"No cost in either"},{"n":"PR-Cindarella-Washunit-Lewis-Electric Black Structure w/ Legrest-White Ceramic","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Buce-Footrest-T Type-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Cindarella-Styling Chair-Disc Base-w/ Lux Pump-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Cindarella-Styling Chair-Five Star Pump-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Cindarella-Washunit-Mademosille Kit for Legrest","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Cindarella-Washunit-Philo Lounge Lift","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Comfortel-Styling Chair-Footrest-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Greiner-Washunit-Gas Lift","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Greiner-Washunit-Tondolore-White Basin","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Kiela-Styling Chair-Disc Base w/ Pump-Chrome","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Kiela-Washunit-Gas Lift","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Kiela-Washunit-White Basin","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Nelson-Washunit-Gas Lift","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Nelson-Washunit-Siphoide Bonde HOLII","i":0.0,"c":null,"s":"No cost in either"},{"n":"SP-Nelson-Washunit-White Basin","i":0.0,"c":null,"s":"No cost in either"},{"n":"ACC-Buce-Headrest","i":74.0,"c":74.0,"s":"Match"},{"n":"ACC-Buce-Shower Fountain","i":1200.0,"c":1200.0,"s":"Match"},{"n":"ACC-Buce-Showerhead","i":147.0,"c":147.0,"s":"Match"},{"n":"ACC-Buce-Showerhead Kit","i":140.0,"c":140.0,"s":"Match"},{"n":"ACC-Buce-Sparkling Tablet (Blue-Oily Hair)","i":130.0,"c":130.0,"s":"Match"},{"n":"ACC-Buce-Sparkling Tablet (Pink-Dry Hair)","i":130.0,"c":130.0,"s":"Match"},{"n":"ACC-Comfortel-Princess Blowdryer Holder-Aluminum","i":73.99,"c":73.99,"s":"Match"},{"n":"ACC-ECOHEAD-","i":184.0,"c":184.0,"s":"Match"},{"n":"ACC-Greiner-Carisma-CLEANER SPRAY-","i":113.0,"c":113.0,"s":"Match"},{"n":"ACC-Greiner-Neckrest-Silicon-B","i":121.28,"c":121.28,"s":"Match"},{"n":"ACC-HEADBED-","i":132.0,"c":132.0,"s":"Match"},{"n":"ACC-HOSE-Long Fabric-","i":80.0,"c":80.0,"s":"Match"},{"n":"ACC-TGR-","i":249.0,"c":249.0,"s":"Match"},{"n":"PR-Ayaka-Scissors-AD Cobalt-7 cm","i":563.0,"c":563.0,"s":"Match"},{"n":"PR-Buce-Styling Chair-101 Top Part","i":740.0,"c":740.0,"s":"Match"},{"n":"PR-Buce-Washunit- S270F white basin","i":5254.0,"c":5254.0,"s":"Match"},{"n":"PR-Buce-Washunit-S370F","i":5476.0,"c":5476.0,"s":"Match"},{"n":"PR-Cindarella-Mancure Table-Kelly Table-White Stucture-WHT-","i":1000.0,"c":1000.0,"s":"Match"},{"n":"PR-Cindarella-Pedicure Chair-Bloom-c/ Fabric-","i":10332.0,"c":10332.0,"s":"Match"},{"n":"PR-Cindarella-Stool-Stool w/ Backrest-","i":800.0,"c":800.0,"s":"Match"},{"n":"PR-Cindarella-Styling Chair-Fame Top-B-","i":400.0,"c":400.0,"s":"Match"},{"n":"PR-Cindarella-Styling Chair-Gaya Top-c/Fabric","i":400.0,"c":400.0,"s":"Match"},{"n":"PR-Cindarella-Styling Chair-Orizen Top-c/ Fabric-","i":1600.0,"c":1600.0,"s":"Match"},{"n":"PR-Cindarella-Styling Chair-Sidero Top-c/ Fabric-","i":1000.0,"c":1000.0,"s":"Match"},{"n":"PR-Cindarella-Styling Chair-Toy Top-B-","i":400.0,"c":400.0,"s":"Match"},{"n":"PR-Cindarella-Trolley-Cash and Carry-Black","i":1000.0,"c":1000.0,"s":"Match"},{"n":"PR-Cindarella-Washunit-Mademoiselle-Silver/Gray Structure","i":9426.0,"c":9426.0,"s":"Match"},{"n":"PR-Cindarella-Washunit-Philo Lounge-Silver/Gray Structure","i":8637.0,"c":8637.0,"s":"Match"},{"n":"PR-Comfortel-Footrest-Supernova-Black","i":232.99,"c":232.99,"s":"Match"},{"n":"PR-Comfortel-Massage Bed-Quatro II Treatment-B","i":2160.44,"c":2160.44,"s":"Match"},{"n":"PR-Comfortel-Steamer-Hair Mist","i":1280.36,"c":1280.36,"s":"Match"},{"n":"PR-Comfortel-Stool-Salon Stone-Tan","i":192.81,"c":192.81,"s":"Match"},{"n":"PR-Gharieni-Massage Bed-MO1 Max","i":22635.29,"c":22635.29,"s":"Match"},{"n":"PR-Greiner-Styling Chair-Model38-Top-MGN","i":2314.13,"c":2314.13,"s":"Match"},{"n":"PR-HBN-Towel Warmer-18L","i":780.0,"c":780.0,"s":"Match"},{"n":"PR-Kiela-Styling Chair-Diva Top-c/ Fabric","i":2934.0,"c":2934.0,"s":"Match"},{"n":"PR-Nelson-Styling Chair-Charm Top-c/ Fabric-","i":1249.82,"c":1249.82,"s":"Match"},{"n":"PR-Nelson-Washunit-Midnight Washunit","i":3415.0,"c":3415.0,"s":"Match"},{"n":"PR-Palladium-Styling Chair-Gravity Top-c/ Fabric-","i":400.0,"c":400.0,"s":"Match"},{"n":"PR-Styling Chair-Nautica Top-Gray","i":2000.0,"c":2000.0,"s":"Match"},{"n":"SP-Buce-Styling Chair-H17R-Chrome Disc Base","i":366.3,"c":366.3,"s":"Match"},{"n":"SP-Buce-Washunit-203W-White Basin","i":1036.0,"c":1036.0,"s":"Match"},{"n":"SP-Cindarella-Aquastop-Chrome","i":64.8,"c":64.8,"s":"Match"},{"n":"SP-Cindarella-Styling Chair-Disc Base-w/ Pump-Black","i":567.0,"c":567.0,"s":"Match"},{"n":"SP-Cindarella-Styling Chair-Disc Base-w/ Pump-Chrome","i":567.0,"c":567.0,"s":"Match"},{"n":"SP-Cindarella-Styling Chair-Star Base-w/ Pump-CHROME-","i":100.0,"c":100.0,"s":"Match"},{"n":"SP-Cindarella-Washunit-Philo / Mademoiselle-White Basin-WHT-","i":100.0,"c":100.0,"s":"Match"},{"n":"SP-Cindarella-Washunit-Philo Lounge-White Basin","i":100.0,"c":100.0,"s":"Match"},{"n":"SP-Comfortel-Styling Chair-Hydraulic Extra Tall Pump-165 mm-Black","i":213.75,"c":213.75,"s":"Match"},{"n":"SP-Comfortel-Styling Chair-Hydraulic Extra Tall Pump-165 mm-Chrome","i":213.75,"c":213.75,"s":"Match"},{"n":"SP-Comfortel-Styling Chair-Omega Round Base-BLACK-","i":213.75,"c":213.75,"s":"Match"},{"n":"SP-Comfortel-Styling Chair-Omega Round Base-Chrome","i":213.75,"c":213.75,"s":"Match"},{"n":"SP-Comfortel-Washunit-Avatar Tilt System II","i":318.49,"c":318.49,"s":"Match"},{"n":"SP-Nelson-Washunit-Cuvette Hol-White Ceramic","i":3141.0,"c":3141.0,"s":"Match"}];
+
+/* ---------- helpers ---------- */
+const $ = (id) => document.getElementById(id);
+const money = (n) => (isFinite(n) ? n : 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const money0 = (n) => (isFinite(n) ? n : 0).toLocaleString('en-US', {maximumFractionDigits:0});
+const pc = (x, d) => (isFinite(x) ? (x*100).toFixed(d===undefined?1:d) : '0.0') + '%';
+const clean = (s) => s.replace(/\s+/g,' ').trim();
+const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const toks = (s) => norm(s).split(' ').filter(t => t.length > 1);
+
+const EXACT = {};
+PRICE.forEach(p => { EXACT[norm(p.n)] = p; });
+
+function score(aT, bT){
+  if(!aT.length || !bT.length) return 0;
+  const b = new Set(bT);
+  let hit = 0;
+  aT.forEach(t => { if(b.has(t)) hit++; });
+  return hit / Math.max(aT.length, bT.length);
+}
+function matchItem(name){
+  const k = norm(name);
+  if(!k) return null;
+  if(EXACT[k]) return {item: EXACT[k], kind: 'exact', score: 1};
+  const t = toks(name);
+  let best = null, bestS = 0;
+  for(const p of PRICE){
+    const s = score(t, toks(p.n));
+    if(s > bestS){ bestS = s; best = p; }
+  }
+  if(best && bestS >= 0.45) return {item: best, kind: 'close', score: bestS};
+  return null;
+}
+function unitCost(item, basis){
+  if(!item) return 0;
+  const first = basis === 'c' ? item.c : item.i;
+  const second = basis === 'c' ? item.i : item.c;
+  if(first !== null && first !== undefined) return first;
+  if(second !== null && second !== undefined) return second;
+  return 0;
+}
+
+/* ---------- state ---------- */
+const state = { lines: [], basis: 'c', target: 70, mode: 'margin', meta: '' };
+let uid = 0;
+
+function totals(){
+  let rev = 0, cost = 0, missing = 0;
+  state.lines.forEach(l => {
+    rev += l.qty * l.price;
+    if(l.cost > 0) cost += l.qty * l.cost; else missing++;
+  });
+  const gp = rev - cost;
+  return {rev, cost, gp, margin: rev > 0 ? gp/rev : 0, markup: cost > 0 ? gp/cost : 0, missing};
+}
+function targetFraction(){
+  const t = state.target/100;
+  return state.mode === 'margin' ? t : t/(1+t);   // markup -> equivalent margin
+}
+function requiredRevenue(cost){
+  const m = targetFraction();
+  return m >= 1 ? Infinity : cost/(1-m);
+}
+function bandOf(m){
+  const t = targetFraction();
+  if(m >= t) return 'good';
+  if(m >= t - 0.10) return 'warn';
+  return 'bad';
+}
+
+/* ---------- PDF text extraction (in-browser, no libraries) ---------- */
+function latin1(bytes){
+  let out = '', CH = 0x8000;
+  for(let i=0;i<bytes.length;i+=CH) out += String.fromCharCode.apply(null, bytes.subarray(i, i+CH));
+  return out;
+}
+function a85(bytes){
+  let start = 0;
+  if(bytes.length > 1 && bytes[0] === 60 && bytes[1] === 126) start = 2;
+  const out = [];
+  let tuple = 0, count = 0;
+  for(let i = start; i < bytes.length; i++){
+    const c = bytes[i];
+    if(c === 126) break;
+    if(c === 122 && count === 0){ out.push(0,0,0,0); continue; }
+    if(c < 33 || c > 117) continue;
+    tuple = tuple * 85 + (c - 33); count++;
+    if(count === 5){
+      out.push(Math.floor(tuple/16777216)%256, Math.floor(tuple/65536)%256, Math.floor(tuple/256)%256, tuple%256);
+      tuple = 0; count = 0;
+    }
+  }
+  if(count > 0){
+    for(let i = count; i < 5; i++) tuple = tuple * 85 + 84;
+    const b = [Math.floor(tuple/16777216)%256, Math.floor(tuple/65536)%256, Math.floor(tuple/256)%256, tuple%256];
+    for(let i = 0; i < count-1; i++) out.push(b[i]);
+  }
+  return new Uint8Array(out);
+}
+function ahx(bytes){
+  let h = '';
+  for(let i = 0; i < bytes.length; i++){
+    const c = String.fromCharCode(bytes[i]);
+    if(c === '>') break;
+    if(/[0-9A-Fa-f]/.test(c)) h += c;
+  }
+  if(h.length % 2) h += '0';
+  const out = new Uint8Array(h.length/2);
+  for(let i = 0; i < out.length; i++) out[i] = parseInt(h.substr(i*2,2), 16);
+  return out;
+}
+async function decodeStream(raw, dict){
+  const fm = /\/Filter\s*(\[[^\]]*\]|\/[A-Za-z0-9]+)/.exec(dict);
+  const filters = fm ? (fm[1].match(/\/([A-Za-z0-9]+)/g) || []).map(x => x.slice(1)) : [];
+  let data = raw;
+  for(const f of filters){
+    if(f === 'FlateDecode'){ const inf = await inflate(data); if(!inf) return null; data = inf; }
+    else if(f === 'ASCII85Decode') data = a85(data);
+    else if(f === 'ASCIIHexDecode') data = ahx(data);
+    else if(f === 'LZWDecode' || f === 'DCTDecode' || f === 'JPXDecode' || f === 'CCITTFaxDecode' || f === 'JBIG2Decode') return null;
+  }
+  return data;
+}
+async function inflate(bytes){
+  for(const f of ['deflate','deflate-raw']){
+    try{
+      const ds = new DecompressionStream(f);
+      const buf = await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer();
+      return new Uint8Array(buf);
+    }catch(e){}
+  }
+  return null;
+}
+function scanObjects(s){
+  const objs = {}, re = /(\d+)\s+\d+\s+obj\b/g;
+  let m;
+  while((m = re.exec(s))){
+    const start = m.index + m[0].length;
+    const end = s.indexOf('endobj', start);
+    objs[+m[1]] = {start, body: s.slice(start, end < 0 ? s.length : end)};
+  }
+  return objs;
+}
+function streamOf(bytes, s, obj){
+  if(!obj) return null;
+  const i = obj.body.indexOf('stream');
+  if(i < 0) return null;
+  let p = obj.start + i + 6;
+  if(s[p] === '\r') p++;
+  if(s[p] === '\n') p++;
+  const e = s.indexOf('endstream', p);
+  if(e < 0) return null;
+  return bytes.subarray(p, e);
+}
+function hexToStr(h){
+  let out = '';
+  for(let i=0;i<h.length;i+=4) out += String.fromCharCode(parseInt(h.substr(i,4).padEnd(4,'0'), 16));
+  return out;
+}
+function parseCMap(txt){
+  const map = {};
+  let m, re = /beginbfchar([\s\S]*?)endbfchar/g;
+  while((m = re.exec(txt))){
+    const pr = /<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g;
+    let p;
+    while((p = pr.exec(m[1]))) map[parseInt(p[1],16)] = hexToStr(p[2]);
+  }
+  re = /beginbfrange([\s\S]*?)endbfrange/g;
+  while((m = re.exec(txt))){
+    const pr = /<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(?:<([0-9A-Fa-f]+)>|\[([\s\S]*?)\])/g;
+    let p;
+    while((p = pr.exec(m[1]))){
+      const lo = parseInt(p[1],16), hi = parseInt(p[2],16);
+      if(p[3] !== undefined){
+        const base = parseInt(p[3],16);
+        for(let c = lo; c <= hi && c-lo < 4096; c++) map[c] = String.fromCharCode(base + (c-lo));
+      }else{
+        const list = p[4].match(/<([0-9A-Fa-f]+)>/g) || [];
+        list.forEach((it, idx) => { map[lo+idx] = hexToStr(it.replace(/[<>]/g,'')); });
+      }
+    }
+  }
+  return map;
+}
+async function buildCMaps(bytes, s, objs){
+  const toUni = {}, fontRes = {}, cmaps = {};
+  for(const num in objs){
+    const mm = /\/ToUnicode\s+(\d+)\s+\d+\s+R/.exec(objs[num].body);
+    if(mm) toUni[num] = +mm[1];
+  }
+  let m, re = /\/Font\s*<<([\s\S]*?)>>/g;
+  while((m = re.exec(s))){
+    const pr = /\/([^\s\/<>\[\]()]+)\s+(\d+)\s+\d+\s+R/g;
+    let p;
+    while((p = pr.exec(m[1]))) fontRes[p[1]] = +p[2];
+  }
+  for(const name in fontRes){
+    const fo = fontRes[name];
+    const uo = toUni[fo];
+    if(uo == null) continue;
+    const sb = streamOf(bytes, s, objs[uo]);
+    if(!sb) continue;
+    const inf = await decodeStream(sb, objs[uo].body);
+    if(!inf) continue;
+    cmaps[name] = parseCMap(latin1(inf));
+  }
+  return cmaps;
+}
+function tokenizeContent(s){
+  const out = [];
+  let i = 0;
+  const DELIM = /[\s\/\[\]<>()]/;
+  while(i < s.length){
+    const c = s[i];
+    if(c === '%'){ while(i < s.length && s[i] !== '\n') i++; continue; }
+    if(c === ' ' || c === '\n' || c === '\r' || c === '\t' || c === '\f' || c === '\0'){ i++; continue; }
+    if(c === '('){
+      let d = 1, j = i+1, buf = '';
+      while(j < s.length && d > 0){
+        const ch = s[j];
+        if(ch === '\\'){
+          const nx = s[j+1];
+          const esc = {n:'\n', r:'\r', t:'\t', b:'\b', f:'\f', '(':'(', ')':')', '\\':'\\'};
+          if(nx in esc){ buf += esc[nx]; j += 2; continue; }
+          if(nx >= '0' && nx <= '7'){
+            let o = '', k = j+1;
+            while(k < s.length && s[k] >= '0' && s[k] <= '7' && o.length < 3){ o += s[k]; k++; }
+            buf += String.fromCharCode(parseInt(o, 8)); j = k; continue;
+          }
+          j += 2; continue;
+        }
+        if(ch === '('){ d++; buf += ch; j++; continue; }
+        if(ch === ')'){ d--; j++; if(d === 0) break; buf += ch; continue; }
+        buf += ch; j++;
+      }
+      out.push({t:'str', v:buf, hex:false}); i = j; continue;
+    }
+    if(c === '<' && s[i+1] === '<'){ out.push({t:'op', v:'<<'}); i += 2; continue; }
+    if(c === '>' && s[i+1] === '>'){ out.push({t:'op', v:'>>'}); i += 2; continue; }
+    if(c === '<'){
+      const e = s.indexOf('>', i);
+      out.push({t:'str', v:s.slice(i+1, e < 0 ? s.length : e).replace(/\s/g,''), hex:true});
+      i = e < 0 ? s.length : e+1; continue;
+    }
+    if(c === '[' || c === ']'){ out.push({t:'op', v:c}); i++; continue; }
+    if(c === '/'){
+      let j = i+1;
+      while(j < s.length && !DELIM.test(s[j])) j++;
+      out.push({t:'name', v:s.slice(i+1, j)}); i = j; continue;
+    }
+    if((c >= '0' && c <= '9') || c === '-' || c === '+' || c === '.'){
+      let j = i;
+      while(j < s.length && /[-+.\d]/.test(s[j])) j++;
+      out.push({t:'num', v:parseFloat(s.slice(i, j)) || 0}); i = j; continue;
+    }
+    let j = i;
+    while(j < s.length && !DELIM.test(s[j])) j++;
+    if(j === i) j++;
+    out.push({t:'op', v:s.slice(i, j)}); i = j; continue;
+  }
+  return out;
+}
+function runContent(tk, cmaps){
+  const out = [];
+  let st = [], tm = null, lm = null, leading = 0, font = null, fs = 10;
+  const dec = (tok) => {
+    const cm = font ? cmaps[font] : null;
+    if(tok.hex){
+      const h = tok.v;
+      let a = '';
+      if(cm){
+        for(let i=0;i<h.length;i+=4){ const c = parseInt(h.substr(i,4).padEnd(4,'0'),16); a += (cm[c] != null ? cm[c] : ''); }
+        if(!a.trim()){
+          a = '';
+          for(let i=0;i<h.length;i+=2){ const c = parseInt(h.substr(i,2),16); a += (cm[c] != null ? cm[c] : String.fromCharCode(c)); }
+        }
+        return a;
+      }
+      for(let i=0;i<h.length;i+=2) a += String.fromCharCode(parseInt(h.substr(i,2),16));
+      return a;
+    }
+    if(cm){
+      let a = '';
+      for(let i=0;i<tok.v.length;i++){ const c = tok.v.charCodeAt(i); a += (cm[c] != null ? cm[c] : tok.v[i]); }
+      return a;
+    }
+    return tok.v;
+  };
+  const show = (txt) => {
+    if(!tm) tm = [1,0,0,1,0,0];
+    if(txt) out.push({x:tm[4], y:tm[5], t:txt});
+    tm[4] += txt.length * fs * 0.5;
+  };
+  for(const t of tk){
+    if(t.t !== 'op'){ st.push(t); continue; }
+    const op = t.v;
+    if(op === '['){ st = []; continue; }
+    if(op === ']' || op === '<<' || op === '>>'){ continue; }
+    const nums = st.filter(x => x.t === 'num').map(x => x.v);
+    const strs = st.filter(x => x.t === 'str');
+    if(op === 'BT'){ tm = [1,0,0,1,0,0]; lm = tm.slice(); }
+    else if(op === 'Tf'){ const nm = st.filter(x => x.t === 'name').pop(); font = nm ? nm.v : null; if(nums.length) fs = Math.abs(nums[nums.length-1]) || 10; }
+    else if(op === 'TL'){ leading = nums[nums.length-1] || 0; }
+    else if(op === 'Td' || op === 'TD'){
+      const ty = nums.length ? nums[nums.length-1] : 0, tx = nums.length > 1 ? nums[nums.length-2] : 0;
+      if(op === 'TD') leading = -ty;
+      lm = lm || [1,0,0,1,0,0]; lm[4] += tx; lm[5] += ty; tm = lm.slice();
+    }
+    else if(op === 'Tm'){ if(nums.length >= 6){ lm = nums.slice(-6); tm = lm.slice(); } }
+    else if(op === 'T*'){ lm = lm || [1,0,0,1,0,0]; lm[5] -= leading; tm = lm.slice(); }
+    else if(op === 'Tj'){ const s0 = strs.pop(); if(s0) show(dec(s0)); }
+    else if(op === "'" || op === '"'){
+      lm = lm || [1,0,0,1,0,0]; lm[5] -= leading; tm = lm.slice();
+      const s0 = strs.pop(); if(s0) show(dec(s0));
+    }
+    else if(op === 'TJ'){
+      let a = '';
+      for(const x of st){
+        if(x.t === 'str') a += dec(x);
+        else if(x.t === 'num' && x.v < -150) a += ' ';
+      }
+      show(a);
+    }
+    st = [];
+  }
+  return out;
+}
+function groupLines(items){
+  items.sort((a,b) => (b.y - a.y) || (a.x - b.x));
+  const rows = [];
+  let cur = null;
+  for(const it of items){
+    if(!cur || Math.abs(cur.y - it.y) > 2.5){ cur = {y: it.y, parts: []}; rows.push(cur); }
+    cur.parts.push(it);
+  }
+  return rows.map(r => {
+    r.parts.sort((a,b) => a.x - b.x);
+    return clean(r.parts.map(p => p.t).join(' '));
+  }).filter(Boolean);
+}
+async function pdfToLines(buf){
+  const bytes = new Uint8Array(buf);
+  const s = latin1(bytes);
+  const objs = scanObjects(s);
+  const cmaps = await buildCMaps(bytes, s, objs);
+  let items = [];
+  for(const num in objs){
+    const raw = streamOf(bytes, s, objs[num]);
+    if(!raw) continue;
+    const data = await decodeStream(raw, objs[num].body);
+    if(!data) continue;
+    const txt = latin1(data);
+    if(!/\bBT\b/.test(txt) || !/(Tj|TJ)/.test(txt)) continue;
+    try{ items = items.concat(runContent(tokenizeContent(txt), cmaps)); }catch(e){}
+  }
+  return groupLines(items);
+}
+
+/* ---------- quote line parsing ---------- */
+const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|p\.?o\.?)/i;
+function parseTextLines(rawLines){
+  const out = [];
+  for(const raw of rawLines){
+    const line = clean(raw).replace(/ /g,' ');
+    if(line.length < 4 || SKIP.test(line)) continue;
+    if(!/[A-Za-z]{3}/.test(line)) continue;
+    const re = /-?\d[\d,]*(?:\.\d+)?/g;
+    const nums = [];
+    let m;
+    while((m = re.exec(line))) nums.push({raw: m[0], v: parseFloat(m[0].replace(/,/g,'')), at: m.index});
+    if(nums.length < 2) continue;
+    const lastLetter = line.search(/[A-Za-z](?![\s\S]*[A-Za-z])/);
+    const tail = nums.filter(n => n.at > lastLetter);
+    if(tail.length < 2) continue;
+    let qty, price, amount;
+    if(tail.length >= 3){
+      qty = tail[tail.length-3].v; price = tail[tail.length-2].v; amount = tail[tail.length-1].v;
+      if(Math.abs(qty*price - amount) > Math.max(1, Math.abs(amount)*0.06) && Math.abs(tail[tail.length-2].v * tail[tail.length-3].v) === 0){ continue; }
+    }else{
+      price = tail[0].v; amount = tail[1].v;
+      qty = price > 0 ? Math.round(amount/price) : 1;
+      if(!isFinite(qty) || qty < 1) qty = 1;
+    }
+    if(!(price > 0) || !(qty > 0) || qty > 9999) continue;
+    let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, ''));
+    name = name.replace(/[|:;,\-\s]+$/,'');
+    if(name.replace(/[^A-Za-z]/g,'').length < 3) continue;
+    out.push({name, qty, price});
+  }
+  return out;
+}
+function addLines(parsed){
+  state.lines = parsed.map(p => {
+    const mt = matchItem(p.name);
+    return {
+      id: ++uid, name: p.name, qty: p.qty, price: p.price,
+      match: mt ? mt.item : null, kind: mt ? mt.kind : 'none',
+      cost: unitCost(mt ? mt.item : null, state.basis), costEdited: false
+    };
+  });
+  render();
+}
+
+/* ---------- rendering ---------- */
+function rowHTML(l){
+  return '<td class="item"><div class="itemname"></div><div class="matchline"></div></td>' +
+    '<td><input class="cell qty" type="number" min="0" step="1" data-k="qty"></td>' +
+    '<td><input class="cell price" type="number" min="0" step="0.01" data-k="price"></td>' +
+    '<td class="n" data-f="rev"></td>' +
+    '<td><input class="cell cost" type="number" min="0" step="0.01" data-k="cost"></td>' +
+    '<td class="n" data-f="cost"></td>' +
+    '<td class="n gp" data-f="gp"></td>' +
+    '<td data-f="margin"></td>' +
+    '<td><button class="rm" title="Remove line">&times;</button></td>';
+}
+function paintMatch(tr, l){
+  tr.querySelector('.itemname').textContent = l.name;
+  const box = tr.querySelector('.matchline');
+  box.textContent = '';
+  const chip = document.createElement('span');
+  chip.className = 'chip ' + l.kind;
+  chip.textContent = l.kind === 'exact' ? 'matched' : l.kind === 'close' ? 'closest' : l.kind === 'manual' ? 'set by hand' : 'no cost';
+  box.appendChild(chip);
+  const nm = document.createElement('span');
+  nm.className = 'matchname';
+  nm.textContent = l.match ? l.match.n : 'not on the price list';
+  nm.title = l.match ? l.match.n : 'No price-list item matched this line';
+  box.appendChild(nm);
+  const b = document.createElement('button');
+  b.className = 'rm';
+  b.title = 'Pick a different price-list item';
+  b.textContent = '⇄';
+  b.addEventListener('click', () => openRemap(box, tr, l));
+  box.appendChild(b);
+}
+function openRemap(box, tr, l){
+  const sel = document.createElement('select');
+  sel.className = 'remap';
+  const none = document.createElement('option');
+  none.value = '';
+  none.textContent = 'No price-list item';
+  sel.appendChild(none);
+  PRICE.forEach((p, i) => {
+    const o = document.createElement('option');
+    o.value = String(i);
+    o.textContent = p.n;
+    if(l.match && l.match.n === p.n) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => {
+    const p = sel.value === '' ? null : PRICE[+sel.value];
+    l.match = p;
+    l.kind = p ? 'manual' : 'none';
+    l.cost = unitCost(p, state.basis);
+    l.costEdited = false;
+    paintMatch(tr, l);
+    tr.querySelector('[data-k="cost"]').value = l.cost ? l.cost.toFixed(2) : '';
+    updateAll();
+  });
+  box.textContent = '';
+  box.appendChild(sel);
+  sel.focus();
+}
+function render(){
+  const tb = $('rows');
+  tb.textContent = '';
+  state.lines.forEach(l => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = String(l.id);
+    tr.innerHTML = rowHTML(l);
+    paintMatch(tr, l);
+    tr.querySelector('[data-k="qty"]').value = l.qty;
+    tr.querySelector('[data-k="price"]').value = l.price.toFixed(2);
+    tr.querySelector('[data-k="cost"]').value = l.cost ? l.cost.toFixed(2) : '';
+    tr.querySelectorAll('input.cell').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const k = inp.dataset.k;
+        const v = parseFloat(inp.value);
+        l[k] = isFinite(v) && v >= 0 ? v : 0;
+        if(k === 'cost'){ l.costEdited = true; if(l.kind === 'none' && l.cost > 0){ l.kind = 'manual'; paintMatch(tr, l); } }
+        updateAll();
+      });
+    });
+    tr.querySelectorAll('td:last-child .rm')[0].addEventListener('click', () => {
+      state.lines = state.lines.filter(x => x.id !== l.id);
+      render();
+    });
+    tb.appendChild(tr);
+  });
+  $('empty').hidden = state.lines.length > 0;
+  $('foot').hidden = state.lines.length === 0;
+  $('export').hidden = state.lines.length === 0;
+  updateAll();
+}
+function updateAll(){
+  const t = totals();
+  state.lines.forEach(l => {
+    const tr = $('rows').querySelector('tr[data-id="' + l.id + '"]');
+    if(!tr) return;
+    const rev = l.qty * l.price, cost = l.qty * l.cost, gp = rev - cost;
+    const m = rev > 0 ? gp/rev : 0;
+    tr.querySelector('[data-f="rev"]').textContent = money(rev);
+    tr.querySelector('[data-f="cost"]').textContent = l.cost > 0 ? money(cost) : '—';
+    tr.querySelector('[data-f="gp"]').textContent = l.cost > 0 ? money(gp) : '—';
+    const mc = tr.querySelector('[data-f="margin"]');
+    mc.textContent = '';
+    if(l.cost > 0){
+      const sp = document.createElement('span');
+      sp.className = 'band ' + bandOf(m);
+      sp.textContent = pc(m);
+      mc.appendChild(sp);
+    }else{
+      mc.textContent = '—';
+    }
+  });
+  $('sRev').textContent = money0(t.rev);
+  $('sRevN').textContent = state.lines.length + (state.lines.length === 1 ? ' line' : ' lines') + (state.meta ? ' · ' + state.meta : '');
+  $('sCost').textContent = money0(t.cost);
+  $('sCostN').textContent = (state.basis === 'c' ? 'COGS price list' : 'Inventory price list') + ' basis';
+  $('sGp').textContent = money0(t.gp);
+  $('sGpN').textContent = t.rev > 0 ? 'Markup on cost ' + pc(t.markup) : 'Quote minus cost';
+  $('sMargin').textContent = t.rev > 0 ? pc(t.margin) : '—';
+  $('sMarginN').textContent = 'Target ' + state.target + '% ' + (state.mode === 'margin' ? 'margin' : 'markup → ' + pc(targetFraction()) + ' margin');
+  $('sGauge').style.width = Math.max(0, Math.min(100, t.margin * 100)) + '%';
+  $('sGauge').style.background = t.rev > 0 ? 'var(--' + ({good:'good', warn:'warn', bad:'bad'}[bandOf(t.margin)]) + ')' : 'var(--line)';
+  $('fRev').textContent = money(t.rev);
+  $('fCost').textContent = money(t.cost);
+  $('fGp').textContent = money(t.gp);
+  $('fMargin').textContent = t.rev > 0 ? pc(t.margin) : '—';
+  $('lineCount').textContent = state.lines.length + (state.lines.length === 1 ? ' line' : ' lines');
+  const un = $('unmatched');
+  if(t.missing > 0){
+    un.hidden = false;
+    un.textContent = '';
+    const b = document.createElement('b');
+    b.textContent = t.missing + (t.missing === 1 ? ' line has ' : ' lines have ') + 'no cost yet.';
+    un.appendChild(b);
+    un.appendChild(document.createTextNode(' They are left out of cost and profit, so the real margin is lower than shown. Pick the price-list item with ⇄, or type the cost in.'));
+  }else{
+    un.hidden = true;
+  }
+  paintTarget(t);
+  save();
+}
+function paintTarget(t){
+  const el = $('targetRead');
+  el.textContent = '';
+  if(state.lines.length === 0 || t.rev <= 0){ el.textContent = 'Load a quote to see the gap to target.'; return; }
+  const m = targetFraction();
+  const need = requiredRevenue(t.cost);
+  const gap = need - t.rev;
+  const label = state.mode === 'margin' ? state.target + '% margin' : state.target + '% markup (= ' + pc(m) + ' margin)';
+  const frag = document.createDocumentFragment();
+  const add = (txt, cls) => { const b = document.createElement('b'); b.textContent = txt; if(cls) b.className = cls; frag.appendChild(b); };
+  frag.appendChild(document.createTextNode('At ' + label + ' this quote needs to be '));
+  add('AED ' + money0(need));
+  frag.appendChild(document.createTextNode('. You are at '));
+  add('AED ' + money0(t.rev));
+  if(gap > 0.5){
+    frag.appendChild(document.createTextNode(' — short by '));
+    add('AED ' + money0(gap), 'up');
+    frag.appendChild(document.createTextNode(' (+' + pc(gap/t.rev) + ' across the quote).'));
+  }else{
+    frag.appendChild(document.createTextNode(' — clear by '));
+    add('AED ' + money0(-gap), 'ok');
+    frag.appendChild(document.createTextNode('. Room to discount ' + pc(-gap/t.rev) + '.'));
+  }
+  el.appendChild(frag);
+}
+
+/* ---------- persistence ---------- */
+function save(){
+  try{
+    localStorage.setItem('hbn-margin-desk', JSON.stringify({
+      basis: state.basis, target: state.target, mode: state.mode, meta: state.meta,
+      lines: state.lines.map(l => ({n: l.name, q: l.qty, p: l.price, c: l.cost, k: l.kind, m: l.match ? l.match.n : null}))
+    }));
+  }catch(e){}
+}
+function restore(){
+  try{
+    const raw = localStorage.getItem('hbn-margin-desk');
+    if(!raw) return false;
+    const d = JSON.parse(raw);
+    if(!d || !Array.isArray(d.lines) || !d.lines.length) return false;
+    state.basis = d.basis === 'i' ? 'i' : 'c';
+    state.target = +d.target || 70;
+    state.mode = d.mode === 'markup' ? 'markup' : 'margin';
+    state.meta = d.meta || '';
+    state.lines = d.lines.map(l => ({
+      id: ++uid, name: l.n, qty: +l.q || 0, price: +l.p || 0, cost: +l.c || 0,
+      kind: l.k || 'none', match: l.m ? (EXACT[norm(l.m)] || null) : null, costEdited: false
+    }));
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ---------- advisor ---------- */
+function el(tag, cls, txt){ const e = document.createElement(tag); if(cls) e.className = cls; if(txt !== undefined) e.textContent = txt; return e; }
+function pushMsg(node, who){
+  const log = $('log');
+  const d = el('div', 'msg ' + who);
+  if(typeof node === 'string') d.textContent = node; else d.appendChild(node);
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+function mini(head, rows){
+  const wrap = el('div', 'mini-wrap');
+  const t = el('table', 'mini');
+  const th = el('tr');
+  head.forEach((h, i) => { const c = el('th', null, h); if(i) c.style.textAlign = 'right'; th.appendChild(c); });
+  t.appendChild(el('thead')).appendChild(th);
+  const tb = el('tbody');
+  rows.forEach(r => {
+    const tr = el('tr');
+    r.forEach((v, i) => { tr.appendChild(el("td", i ? "n" : null, v)); });
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  wrap.appendChild(t);
+  return wrap;
+}
+function bot(parts){
+  const box = el('div');
+  parts.forEach(p => {
+    if(p === null || p === undefined) return;
+    if(p.lead) box.appendChild(el('p', 'lead', p.lead));
+    else if(p.p) box.appendChild(el('p', null, p.p));
+    else if(p.formula) box.appendChild(el('div', 'formula', p.formula));
+    else if(p.table) box.appendChild(mini(p.table.head, p.table.rows));
+  });
+  pushMsg(box, 'bot');
+}
+function evalExpr(src){
+  let s = src.toLowerCase()
+    .replace(/\b(aed|dhs|dirhams?)\b/g, '')
+    .replace(/(\d[\d,]*\.?\d*)\s*%\s*of\s*/g, '($1/100)*')
+    .replace(/,/g, '')
+    .replace(/(\d+\.?\d*)\s*%/g, '($1/100)')
+    .replace(/[x×]/g, '*').replace(/÷/g, '/')
+    .replace(/[^0-9+\-*/().\s]/g, '');
+  if(!/\d/.test(s) || !/[+\-*/]/.test(s)) return null;
+  let i = 0;
+  const ws = () => { while(s[i] === ' ') i++; };
+  function prim(){
+    ws();
+    if(s[i] === '('){ i++; const v = expr(); ws(); if(s[i] === ')') i++; return v; }
+    let j = i;
+    while(j < s.length && /[\d.]/.test(s[j])) j++;
+    if(j === i){ i++; return NaN; }
+    const v = parseFloat(s.slice(i, j)); i = j; return v;
+  }
+  function unary(){ ws(); if(s[i] === '-'){ i++; return -unary(); } if(s[i] === '+'){ i++; return unary(); } return prim(); }
+  function term(){ let v = unary(); for(;;){ ws(); if(s[i] === '*'){ i++; v *= unary(); } else if(s[i] === '/'){ i++; const d = unary(); v = d === 0 ? NaN : v/d; } else return v; } }
+  function expr(){ let v = term(); for(;;){ ws(); if(s[i] === '+'){ i++; v += term(); } else if(s[i] === '-'){ i++; v -= term(); } else return v; } }
+  const v = expr();
+  return isFinite(v) ? {v, s: clean(s)} : null;
+}
+function askedPercent(q){
+  let m = /(\d+(?:\.\d+)?)\s*(?:%|percent|per cent|pc\b)/.exec(q);
+  if(m) return parseFloat(m[1]);
+  m = /\b(?:at|hit|reach|make|charge|want|need)\s+(\d{1,2}(?:\.\d+)?)\b(?!\s*(?:aed|dhs|k\b))/.exec(q);
+  return m ? parseFloat(m[1]) : null;
+}
+function askedAmount(q){
+  const m = /(?:aed|dhs)?\s*([\d,]+(?:\.\d+)?)\s*(?:aed|dhs|off|discount)/.exec(q);
+  return m ? parseFloat(m[1].replace(/,/g,'')) : null;
+}
+function askedMode(q, fallback){
+  if(/mark ?up/.test(q)) return 'markup';
+  if(/margin|gp\b|gross/.test(q)) return 'margin';
+  return fallback;
+}
+function marginFor(pctVal, mode){ const t = pctVal/100; return mode === 'margin' ? t : t/(1+t); }
+function findLine(q){
+  const qt = toks(q);
+  let best = null, bs = 0;
+  state.lines.forEach(l => {
+    const lt = toks(l.match ? l.match.n : l.name).filter(t => !/^(the|and|for|with|pr|acc|sp)$/.test(t));
+    let hit = 0;
+    lt.forEach(t => { if(qt.indexOf(t) >= 0) hit++; });
+    const s = lt.length ? hit/lt.length : 0;
+    if(hit >= 1 && s > bs){ bs = s; best = l; }
+  });
+  return bs >= 0.34 ? best : null;
+}
+function planWeakestFirst(need, m){
+  const rows = state.lines.map(l => {
+    const now = l.qty * l.price;
+    const cap = l.cost > 0 ? (l.cost/(1-m))*l.qty : now;
+    return {l, now, next: now, cap, m: l.price > 0 ? (l.price - l.cost)/l.price : 0};
+  });
+  rows.sort((a,b) => a.m - b.m);
+  let remain = need - rows.reduce((s,r) => s + r.now, 0);
+  rows.forEach(r => {
+    if(remain <= 0.01) return;
+    const head = Math.max(0, r.cap - r.now);
+    const take = Math.min(head, remain);
+    r.next = r.now + take;
+    remain -= take;
+  });
+  return {rows, short: Math.max(0, remain)};
+}
+function planAccessoriesFirst(need){
+  const rows = state.lines.map(l => ({
+    l, now: l.qty*l.price, next: l.qty*l.price,
+    acc: /^(acc|sp)[-\s]/i.test(l.match ? l.match.n : l.name)
+  }));
+  let remain = need - rows.reduce((s,r) => s + r.now, 0);
+  rows.filter(r => r.acc).forEach(r => {
+    if(remain <= 0.01) return;
+    const take = Math.min(r.now, remain);   // at most double an accessory line
+    r.next = r.now + take;
+    remain -= take;
+  });
+  if(remain > 0.01){
+    const rest = rows.filter(r => !r.acc);
+    const base = rest.reduce((s,r) => s + r.now, 0);
+    if(base > 0) rest.forEach(r => { r.next = r.now + remain*(r.now/base); });
+  }
+  return {rows};
+}
+function planTable(rows, limit){
+  const moved = rows.filter(r => r.next - r.now > 0.5).sort((a,b) => (b.next-b.now) - (a.next-a.now));
+  const shown = moved.slice(0, limit || 6);
+  const body = shown.map(r => [
+    (r.l.match ? r.l.match.n : r.l.name),
+    money0(r.now),
+    money0(r.next),
+    '+' + pc((r.next-r.now)/r.now, 0)
+  ]);
+  const t = {head: ['Line', 'Now', 'New', 'Move'], rows: body};
+  return {table: t, more: moved.length - shown.length};
+}
+const HELP = [
+  'if I charge the client 70%, where should I add more?',
+  'what margin am I at?',
+  'what if I give 8% discount?',
+  'which lines are below target?',
+  'what should I charge for the Belluna washunit at 60%?',
+  'how much discount can I still give?',
+  '1070 * 4 * 1.15'
+];
+function respond(raw){
+  const q = clean(raw).toLowerCase();
+  const t = totals();
+  const has = state.lines.length > 0 && t.rev > 0;
+
+  // pure arithmetic
+  if(/^[\d\s.,+\-*/()%x×÷]+$/.test(q) || /^(what(?:'s| is)|calculate|compute|=)\b/.test(q)){
+    const r = evalExpr(q);
+    if(r){ bot([{lead: money(r.v)}, {formula: r.s + ' = ' + money(r.v)}]); return; }
+  }
+  if(!has && !/help|what can you/.test(q)){
+    bot([{lead: 'No quote loaded yet.'}, {p: 'Drop the Zoho PDF (or paste the lines) and I can work the numbers on it. I can still do plain arithmetic meanwhile — try "1070 * 4 * 1.15".'}]);
+    return;
+  }
+
+  const pct0 = askedPercent(q);
+  const mode = askedMode(q, state.mode);
+  const m = pct0 !== null ? marginFor(pct0, mode) : targetFraction();
+  const label = pct0 !== null ? (pct0 + '% ' + (mode === 'margin' ? 'margin' : 'markup')) : (state.target + '% ' + state.mode);
+  const need = t.cost/(1-m);
+  const gap = need - t.rev;
+  const ambiguity = (pct0 !== null && mode === 'margin' && !/margin/.test(q))
+    ? {p: 'Read as gross margin (profit ÷ selling price). If you meant ' + pct0 + '% markup on cost, that is only ' + pc(marginFor(pct0,'markup')) + ' margin — say "markup" and I will redo it.'}
+    : null;
+  const missingNote = t.missing > 0 ? {p: t.missing + ' line(s) still have no cost, so these figures flatter the quote until you fill them in.'} : null;
+
+  // where to add
+  if(/where|which line|which item|add more|add on|increase|bump|push|top up|make up|adjust/.test(q) && !/below|weak|worst|thin|losing|loss\b/.test(q) && (pct0 !== null || /target/.test(q))){
+    if(gap <= 0.5){
+      bot([{lead: 'Nothing to add — you are already at ' + pc(t.margin) + '.'},
+           {p: 'At ' + label + ' the quote only needs AED ' + money0(need) + ' and you are quoting AED ' + money0(t.rev) + '. You have AED ' + money0(-gap) + ' of room (' + pc(-gap/t.rev) + ') before you drop below target.'},
+           ambiguity]);
+      return;
+    }
+    const weak = planWeakestFirst(need, m);
+    const pt = planTable(weak.rows);
+    const acc = planAccessoriesFirst(need);
+    const accMoved = acc.rows.filter(r => r.acc && r.next - r.now > 0.5).length;
+    const factor = need/t.rev;
+    bot([
+      {lead: 'Short by AED ' + money0(gap) + ' to reach ' + label + '.'},
+      {p: 'Cheapest place to find it: the thin lines. Raising these to ' + pc(m) + ' each covers the gap — the rest of the quote never changes, so the client sees fewer moved numbers.'},
+      pt.table.rows.length ? {table: pt.table} : {p: 'No line has room to move at that target.'},
+      pt.more > 0 ? {p: '…and ' + pt.more + ' more line(s) in the same plan.'} : null,
+      weak.short > 1 ? {p: 'AED ' + money0(weak.short) + ' of the gap cannot be placed — those lines have no cost on file, so I cannot price them to a margin.'} : null,
+      {p: 'Two other ways: spread it evenly (multiply every line by ' + factor.toFixed(4) + ', i.e. +' + pc(factor-1) + ' across the board), or load it onto the ' + accMoved + ' accessory / spare line(s) first, where clients rarely benchmark the price.'},
+      {formula: 'need = cost ÷ (1 − margin) = ' + money0(t.cost) + ' ÷ ' + (1-m).toFixed(4) + ' = ' + money0(need) + '\ngap  = need − quoted = ' + money0(need) + ' − ' + money0(t.rev) + ' = ' + money0(gap)},
+      ambiguity, missingNote
+    ]);
+    return;
+  }
+
+  // discount
+  if(/discount|reduce|drop|lower|cut|off\b|nego/.test(q)){
+    const pctIsTarget = pct0 !== null && /(stay|keep|hold|maintain|remain)\b|margin|mark ?up|target/.test(q);
+    const tgtM = pctIsTarget ? m : targetFraction();
+    const dNeed = t.cost/(1-tgtM);
+    const dLabel = pctIsTarget ? label : (state.target + '% ' + state.mode);
+    const room = t.rev - dNeed;
+    const amt = askedAmount(q);
+    const dp = (pct0 !== null && !pctIsTarget) ? pct0/100 : null;
+    if(dp !== null || amt !== null){
+      const newRev = dp !== null ? t.rev*(1-dp) : t.rev - amt;
+      const newM = newRev > 0 ? (newRev - t.cost)/newRev : 0;
+      bot([
+        {lead: (dp !== null ? pc(dp,0) + ' off' : 'AED ' + money0(amt) + ' off') + ' → margin ' + pc(newM) + ' (from ' + pc(t.margin) + ')'},
+        {p: 'Quote drops to AED ' + money0(newRev) + ' against AED ' + money0(t.cost) + ' of cost. Gross profit ' + money0(newRev - t.cost) + '.'},
+        {p: room > 0 ? 'Your floor at ' + dLabel + ' is AED ' + money0(dNeed) + ', so the most you can give away is AED ' + money0(room) + ' (' + pc(room/t.rev) + ').'
+                     : 'You are already ' + money0(-room) + ' below the ' + dLabel + ' floor of AED ' + money0(dNeed) + ', so any discount takes it further under target.'},
+        {formula: 'margin = (quote − cost) ÷ quote = (' + money0(newRev) + ' − ' + money0(t.cost) + ') ÷ ' + money0(newRev) + ' = ' + pc(newM)}
+      ]);
+      return;
+    }
+    bot([
+      {lead: room > 0 ? 'You can give up to AED ' + money0(room) + ' — ' + pc(room/t.rev) + '.' : 'No discount room: the quote is already under ' + dLabel + '.'},
+      {p: room > 0 ? 'That holds ' + dLabel + ' exactly (floor AED ' + money0(dNeed) + ' against AED ' + money0(t.cost) + ' cost). Anything beyond it eats into target.'
+                   : 'To sit at ' + dLabel + ' the quote would have to be AED ' + money0(dNeed) + ', and you are quoting AED ' + money0(t.rev) + '. Raise the quote by AED ' + money0(-room) + ' before you talk about discount.'},
+      {formula: 'floor = cost ÷ (1 − margin) = ' + money0(t.cost) + ' ÷ ' + (1-tgtM).toFixed(4) + ' = ' + money0(dNeed) + '\nroom  = quoted − floor = ' + money0(t.rev) + ' − ' + money0(dNeed) + ' = ' + money0(room)},
+      ambiguity
+    ]);
+    return;
+  }
+
+  // per-item price to hit a margin
+  const line = findLine(q);
+  if(line && (pct0 !== null || /price|charge|sell|quote/.test(q))){
+    if(line.cost <= 0){
+      bot([{lead: 'No cost on file for that line.'}, {p: '"' + line.name + '" is not matched to the price list. Use ⇄ on the line to pick the right item, or type the unit cost in, and ask me again.'}]);
+      return;
+    }
+    const want = line.cost/(1-m);
+    const nowM = (line.price - line.cost)/line.price;
+    bot([
+      {lead: 'AED ' + money(want) + ' a unit for ' + pc(m) + '.'},
+      {p: (line.match ? line.match.n : line.name) + ' costs AED ' + money(line.cost) + '. You are quoting AED ' + money(line.price) + ' — that is ' + pc(nowM) + '. At ' + pc(m) + ' the line goes from AED ' + money0(line.qty*line.price) + ' to AED ' + money0(line.qty*want) + ' for ' + line.qty + ' unit(s).'},
+      {formula: 'price = cost ÷ (1 − margin) = ' + money(line.cost) + ' ÷ ' + (1-m).toFixed(4) + ' = ' + money(want)},
+      ambiguity
+    ]);
+    return;
+  }
+
+  // weak lines
+  if(/below|weak|worst|thin|losing|loss|red|risk|bad/.test(q)){
+    const rows = state.lines.filter(l => l.cost > 0).map(l => {
+      const lm = (l.price - l.cost)/l.price;
+      return {l, lm, needP: l.cost/(1-m)};
+    }).filter(r => r.lm < m).sort((a,b) => a.lm - b.lm);
+    if(!rows.length){ bot([{lead: 'Every costed line is at or above ' + pc(m) + '.'}, missingNote]); return; }
+    bot([
+      {lead: rows.length + ' line(s) sit below ' + pc(m) + '.'},
+      {table: {head: ['Line', 'Margin', 'Price now', 'At target'], rows: rows.slice(0,7).map(r => [
+        (r.l.match ? r.l.match.n : r.l.name), pc(r.lm,0), money0(r.l.price), money0(r.needP)
+      ])}},
+      rows.length > 7 ? {p: '…and ' + (rows.length-7) + ' more.'} : null,
+      {p: 'Worst offender: ' + (rows[0].l.match ? rows[0].l.match.n : rows[0].l.name) + ' at ' + pc(rows[0].lm) + '.'},
+      missingNote
+    ]);
+    return;
+  }
+
+  // markup / margin conversion
+  if(/mark ?up/.test(q) && /margin/.test(q)){
+    const rowsC = [30,40,50,60,70,100,150].map(x => [x + '% markup', pc(marginFor(x,'markup'),1)]);
+    bot([
+      {lead: 'Markup and margin are not the same number.'},
+      {p: 'This quote runs ' + pc(t.markup) + ' markup on cost, which is ' + pc(t.margin) + ' margin.'},
+      {table: {head: ['On cost', 'Is margin'], rows: rowsC}},
+      {formula: 'margin = markup ÷ (1 + markup)   ·   markup = margin ÷ (1 − margin)'}
+    ]);
+    return;
+  }
+
+  // status / anything else with data
+  if(/margin|status|how (am|are)|where (am|do)|summary|total|profit|gp\b|stand/.test(q) || pct0 !== null){
+    bot([
+      {lead: 'Margin ' + pc(t.margin) + ' — AED ' + money0(t.gp) + ' gross profit.'},
+      {p: 'Quoted AED ' + money0(t.rev) + ' against AED ' + money0(t.cost) + ' of cost across ' + state.lines.length + ' line(s). That is ' + pc(t.markup) + ' markup on cost.'},
+      {p: gap > 0.5 ? 'To reach ' + label + ' the quote needs AED ' + money0(need) + ' — short by AED ' + money0(gap) + ' (+' + pc(gap/t.rev) + ').'
+                    : 'That clears ' + label + ' by AED ' + money0(-gap) + '.'},
+      {formula: 'margin = (quote − cost) ÷ quote = (' + money0(t.rev) + ' − ' + money0(t.cost) + ') ÷ ' + money0(t.rev) + ' = ' + pc(t.margin)},
+      ambiguity, missingNote
+    ]);
+    return;
+  }
+
+  bot([
+    {lead: 'Ask me in numbers and I will answer in numbers.'},
+    {p: 'Things I work out from the loaded quote: ' + HELP.slice(0,6).map(h => '“' + h + '”').join(', ') + '. Plain arithmetic works too.'}
+  ]);
+}
+
+/* ---------- events ---------- */
+function setStatus(msg, cls){ const s = $('status'); s.textContent = msg; s.className = 'status' + (cls ? ' ' + cls : ''); }
+
+async function handleFile(f){
+  if(!f) return;
+  if(!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf'){ setStatus('That is not a PDF. Export the quote from Zoho as PDF, or paste the lines instead.', 'err'); return; }
+  setStatus('Reading ' + f.name + '…');
+  try{
+    const buf = await f.arrayBuffer();
+    const lines = await pdfToLines(buf);
+    const meta = (lines.find(l => /quote\s*#|estimate\s*#|qt-|est-/i.test(l)) || '').slice(0, 60);
+    const parsed = parseTextLines(lines);
+    if(!parsed.length){
+      setStatus('Could not read line items from that PDF — it may be a scan or an image. Paste the quote text instead and I will read it from there.', 'err');
+      $('pasteBox').classList.add('open');
+      return;
+    }
+    state.meta = meta ? clean(meta) : f.name.replace(/\.pdf$/i, '');
+    addLines(parsed);
+    const t = totals();
+    setStatus('Read ' + parsed.length + ' line(s) from ' + f.name + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all matched to the price list'), t.missing ? '' : 'ok');
+  }catch(e){
+    setStatus('That PDF could not be read in the browser. Paste the quote text instead.', 'err');
+    $('pasteBox').classList.add('open');
+  }
+}
+const drop = $('drop');
+drop.addEventListener('click', () => $('file').click());
+drop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { const f = e.dataTransfer.files && e.dataTransfer.files[0]; handleFile(f); });
+$('file').addEventListener('change', e => handleFile(e.target.files[0]));
+
+$('pasteToggle').addEventListener('click', () => $('pasteBox').classList.toggle('open'));
+$('parsePaste').addEventListener('click', () => {
+  const txt = $('pasteText').value;
+  const parsed = parseTextLines(txt.split(/\r?\n/).map(l => l.replace(/\t/g, '  ')));
+  if(!parsed.length){ setStatus('No item lines found in that text. Each line needs a name and at least a price and an amount.', 'err'); return; }
+  state.meta = 'pasted';
+  addLines(parsed);
+  const t = totals();
+  setStatus('Read ' + parsed.length + ' line(s) from the pasted text' + (t.missing ? ' · ' + t.missing + ' without a cost match' : ' · all matched'), t.missing ? '' : 'ok');
+});
+$('addRow').addEventListener('click', () => {
+  state.lines.push({id: ++uid, name: 'New line', qty: 1, price: 0, cost: 0, match: null, kind: 'none', costEdited: false});
+  render();
+  const last = $('rows').lastElementChild;
+  if(last){ last.scrollIntoView({block:'nearest'}); last.querySelector('[data-k="price"]').focus(); }
+  setStatus('Line added — pick the price-list item with ⇄, then type qty and price.');
+});
+$('clear').addEventListener('click', () => {
+  state.lines = []; state.meta = '';
+  render();
+  setStatus('Cleared.');
+});
+$('demo').addEventListener('click', () => {
+  state.meta = 'sample quote';
+  addLines([
+    {name: 'PR-Kiela-Washunit-Belluna Washunit-Chrome Structure', qty: 2, price: 8900},
+    {name: 'PR-Comfortel-Styling Chair-Blake Top-Black', qty: 6, price: 890},
+    {name: 'PR-Nelson-Stool-Iron', qty: 4, price: 1450},
+    {name: 'PR-Comfortel-Trolley-Mova', qty: 2, price: 2100},
+    {name: 'SP-Comfortel-Styling Chair-Capital Star Base-Chrome', qty: 6, price: 260},
+    {name: 'ACC-Buce-Headrest', qty: 6, price: 140}
+  ]);
+  setStatus('Sample quote loaded — six real price-list items with made-up selling prices.', 'ok');
+});
+$('basisSeg').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.basis = b.dataset.basis;
+  Array.from($('basisSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  state.lines.forEach(l => { if(!l.costEdited) l.cost = unitCost(l.match, state.basis); });
+  render();
+});
+$('targetVal').addEventListener('input', () => { state.target = parseFloat($('targetVal').value) || 0; updateAll(); });
+$('targetMode').addEventListener('change', () => { state.mode = $('targetMode').value; updateAll(); });
+$('askForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = clean($('askInput').value);
+  if(!v) return;
+  pushMsg(v, 'me');
+  $('askInput').value = '';
+  respond(v);
+});
+HELP.slice(0, 5).forEach(h => {
+  const b = el('button', null, h);
+  b.addEventListener('click', () => { pushMsg(h, 'me'); respond(h); });
+  $('chips').appendChild(b);
+});
+
+/* ---------- export ---------- */
+async function capUse(n){ try{ return (window.claude && window.claude.use) ? await window.claude.use(n) : null; }catch(e){ return null; } }
+$('export').addEventListener('click', async () => {
+  const t = totals();
+  const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = [['Item (quote)', 'Price-list item', 'Match', 'Qty', 'Unit price', 'Line total', 'Unit cost', 'Line cost', 'Gross profit', 'Margin %']];
+  state.lines.forEach(l => {
+    const rev = l.qty*l.price, c = l.qty*l.cost;
+    rows.push([l.name, l.match ? l.match.n : '', l.kind, l.qty, l.price.toFixed(2), rev.toFixed(2), l.cost.toFixed(2), c.toFixed(2), (rev-c).toFixed(2), rev > 0 ? ((rev-c)/rev*100).toFixed(1) : '']);
+  });
+  rows.push([]);
+  rows.push(['TOTAL', '', '', '', '', t.rev.toFixed(2), '', t.cost.toFixed(2), t.gp.toFixed(2), (t.margin*100).toFixed(1)]);
+  const csv = rows.map(r => r.map(esc).join(',')).join('\r\n');
+  const dl = await capUse('downloads');
+  if(!dl){ setStatus('Saving files is not available in this view — copy the table instead.', 'err'); return; }
+  try{
+    await dl.save({filename: 'quote-margin.csv', data: csv});
+    setStatus('Margin sheet saved.', 'ok');
+  }catch(err){
+    if(err && err.code === 'extension_not_enabled'){
+      try{ await dl.save({filename: 'quote-margin.txt', data: csv}); setStatus('Saved as .txt — rename to .csv to open in Excel.', 'ok'); return; }catch(e2){}
+    }
+    if(err && err.code === 'declined') return;
+    setStatus('Could not save the file.', 'err');
+  }
+});
+(async () => { const dl = await capUse('downloads'); if(!dl && state.lines.length) $('export').hidden = true; })();
+
+/* ---------- boot ---------- */
+if(restore()){
+  $('targetVal').value = state.target;
+  $('targetMode').value = state.mode;
+  Array.from($('basisSeg').children).forEach(x => x.setAttribute('aria-pressed', String(x.dataset.basis === state.basis)));
+  render();
+  setStatus('Picked up where you left off — ' + state.lines.length + ' line(s) from your last quote.');
+}else{
+  render();
+}
+bot([
+  {lead: 'Margin desk ready.'},
+  {p: 'Drop a Zoho quote PDF and I will cost every line against the 25 Aug price list. Then ask me anything with a number in it — target margins, discounts, where to move price, or plain arithmetic.'}
+]);
+</script>
