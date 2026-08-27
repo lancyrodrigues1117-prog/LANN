@@ -830,7 +830,7 @@ async function pdfToLines(buf){
 
 
 /* ---------- reading quote lines ---------- */
-const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|price list|effective|standard rate|rounding|round off|payment made|balance due|deposit|advance|shipping charge|delivery charge|p\.?o\.?)/i;
+const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|price list|effective|standard rate|zero rate|rounding|round off|payment made|balance due|deposit|advance|shipping charge|delivery charge|p\.?o\.?)/i;
 function parseTextLines(rawLines){
   const out = [];
   for(const raw of rawLines){
@@ -851,7 +851,7 @@ function parseTextLines(rawLines){
     for(let i = 0; i < tail.length-1 && qty === null; i++){
       for(let j = i+1; j < tail.length-1; j++){
         const a = tail[i].v, r = tail[j].v;
-        if(!(a > 0) || !(r > 0) || a > 9999) continue;
+        if(!(a > 0) || r < 0 || a > 9999) continue;   // r may be 0: free-of-charge line
         if(Math.abs(a*r - amount) <= Math.max(0.05, Math.abs(amount)*0.005)){ qty = a; price = r; break; }
       }
     }
@@ -862,7 +862,9 @@ function parseTextLines(rawLines){
         qty = price > 0 ? Math.round(amount/price) : 0;
       }
     }
-    if(!(price > 0) || !(qty > 0) || qty > 9999) continue;
+    // A free-of-charge line still costs us money, so keep it: zero price, real cost.
+    if(price === null || price < 0 || !(qty > 0) || qty > 9999) continue;
+    if(price === 0 && (qty % 1 !== 0 || qty > 999)) continue;
     let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, '')).replace(/[|:;,\-\s]+$/,'');
     if(name.replace(/[^A-Za-z]/g,'').length < 3) continue;
     if(name.length > 90) continue;                       // a paragraph, not an item
