@@ -528,12 +528,17 @@ async function decodeStream(raw, dict){
   return data;
 }
 async function inflate(bytes){
-  for(const f of ['deflate','deflate-raw']){
-    try{
-      const ds = new DecompressionStream(f);
-      const buf = await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer();
-      return new Uint8Array(buf);
-    }catch(e){}
+  // last resort for a stream whose length was off: shave the trailing bytes
+  for(let cut = 0; cut <= 2; cut++){
+    const b = cut ? bytes.subarray(0, bytes.length - cut) : bytes;
+    if(!b.length) break;
+    for(const f of ['deflate','deflate-raw']){
+      try{
+        const ds = new DecompressionStream(f);
+        const buf = await new Response(new Blob([b]).stream().pipeThrough(ds)).arrayBuffer();
+        if(buf.byteLength) return new Uint8Array(buf);
+      }catch(e){}
+    }
   }
   return null;
 }
@@ -554,8 +559,17 @@ function streamOf(bytes, s, obj){
   let p = obj.start + i + 6;
   if(s[p] === '\r') p++;
   if(s[p] === '\n') p++;
-  const e = s.indexOf('endstream', p);
+  // /Length gives the exact end. Trust it when it lands on "endstream" — the
+  // newline most writers put before that keyword is not part of the data, and
+  // a decompressor rejects the whole stream over that one byte.
+  const lm = /\/Length\s+(\d+)(?!\s+\d+\s+R)/.exec(obj.body);
+  if(lm){
+    const end = p + (+lm[1]);
+    if(end <= bytes.length && /^\s*endstream/.test(s.slice(end, end + 12))) return bytes.subarray(p, end);
+  }
+  let e = s.indexOf('endstream', p);
   if(e < 0) return null;
+  while(e > p && (s[e-1] === '\n' || s[e-1] === '\r')) e--;
   return bytes.subarray(p, e);
 }
 function hexToStr(h){
@@ -589,7 +603,7 @@ function parseCMap(txt){
   return map;
 }
 async function buildCMaps(bytes, s, objs){
-  const toUni = {}, fontRes = {}, cmaps = {};
+  const toUni = {}, fontRes = {}, cmaps = {}, wide = {};
   for(const num in objs){
     const mm = /\/ToUnicode\s+(\d+)\s+\d+\s+R/.exec(objs[num].body);
     if(mm) toUni[num] = +mm[1];
@@ -602,6 +616,9 @@ async function buildCMaps(bytes, s, objs){
   }
   for(const name in fontRes){
     const fo = fontRes[name];
+    const fd = objs[fo] ? objs[fo].body : '';
+    // Type0 / Identity-H fonts address glyphs with two bytes per character
+    wide[name] = /\/Type0|\/Identity-H|\/Identity-V/.test(fd);
     const uo = toUni[fo];
     if(uo == null) continue;
     const sb = streamOf(bytes, s, objs[uo]);
@@ -610,6 +627,7 @@ async function buildCMaps(bytes, s, objs){
     if(!inf) continue;
     cmaps[name] = parseCMap(latin1(inf));
   }
+  cmaps.__wide = wide;
   return cmaps;
 }
 function tokenizeContent(s){
@@ -666,16 +684,36 @@ function tokenizeContent(s){
   }
   return out;
 }
+// Rough advance widths, in em, for the Latin set. Enough to tell a gap between
+// words from the slack left over inside one.
+const CHW = {};
+(function(){
+  const set = (chars, v) => { for(const c of chars) CHW[c] = v; };
+  set(' ', 0.26); set("ijlI.,:;'!|", 0.28); set('frt()[]{}/\\-', 0.34);
+  set('0123456789$%', 0.56);
+  set('abcdeghknopqsuvxyz', 0.55); set('mw', 0.85);
+  set('ABCDEFGHJKLNOPQRSTUVXYZ&', 0.68); set('MW', 0.92);
+})();
+function runWidth(txt, es){
+  let t = 0;
+  for(let i = 0; i < txt.length; i++){ const c = CHW[txt[i]]; t += (c === undefined ? 0.55 : c); }
+  return t * es;
+}
 function runContent(tk, cmaps){
   const out = [];
   let st = [], tm = null, lm = null, leading = 0, font = null, fs = 10;
+  const WIDE = cmaps.__wide || {};
   const dec = (tok) => {
     const cm = font ? cmaps[font] : null;
+    const wide = font ? !!WIDE[font] : false;
     if(tok.hex){
       const h = tok.v;
       let a = '';
-      if(cm){
-        for(let i=0;i<h.length;i+=4){ const c = parseInt(h.substr(i,4).padEnd(4,'0'),16); a += (cm[c] != null ? cm[c] : ''); }
+      if(cm || wide){
+        for(let i=0;i<h.length;i+=4){
+          const c = parseInt(h.substr(i,4).padEnd(4,'0'),16);
+          a += (cm && cm[c] != null) ? cm[c] : (c > 31 ? String.fromCharCode(c) : '');
+        }
         if(!a.trim()){
           a = '';
           for(let i=0;i<h.length;i+=2){ const c = parseInt(h.substr(i,2),16); a += (cm[c] != null ? cm[c] : String.fromCharCode(c)); }
@@ -685,6 +723,15 @@ function runContent(tk, cmaps){
       for(let i=0;i<h.length;i+=2) a += String.fromCharCode(parseInt(h.substr(i,2),16));
       return a;
     }
+    if(wide){
+      // two bytes per glyph; fall back to the code point when the map is short
+      let a = '';
+      for(let i = 0; i + 1 < tok.v.length; i += 2){
+        const code = (tok.v.charCodeAt(i) << 8) | tok.v.charCodeAt(i+1);
+        a += (cm && cm[code] != null) ? cm[code] : (code > 31 ? String.fromCharCode(code) : '');
+      }
+      return a;
+    }
     if(cm){
       let a = '';
       for(let i=0;i<tok.v.length;i++){ const c = tok.v.charCodeAt(i); a += (cm[c] != null ? cm[c] : tok.v[i]); }
@@ -692,10 +739,13 @@ function runContent(tk, cmaps){
     }
     return tok.v;
   };
+  const scale = () => Math.hypot(tm[0], tm[1]) || 1;   // Tm can carry the scale
   const show = (txt) => {
     if(!tm) tm = [1,0,0,1,0,0];
-    if(txt) out.push({x:tm[4], y:tm[5], t:txt});
-    tm[4] += txt.length * fs * 0.5;
+    const es = fs * scale();
+    const w = runWidth(txt, es);
+    if(txt) out.push({x:tm[4], y:tm[5], t:txt, w, es});
+    tm[4] += w;
   };
   for(const t of tk){
     if(t.t !== 'op'){ st.push(t); continue; }
@@ -720,12 +770,13 @@ function runContent(tk, cmaps){
       const s0 = strs.pop(); if(s0) show(dec(s0));
     }
     else if(op === 'TJ'){
-      let a = '';
+      // Each element is placed separately; the numbers move the pen. Emitting one
+      // item per element lets position decide the spacing later on.
+      if(!tm) tm = [1,0,0,1,0,0];
       for(const x of st){
-        if(x.t === 'str') a += dec(x);
-        else if(x.t === 'num' && x.v < -150) a += ' ';
+        if(x.t === 'str') show(dec(x));
+        else if(x.t === 'num') tm[4] -= (x.v/1000) * fs * scale();
       }
-      show(a);
     }
     st = [];
   }
@@ -741,7 +792,15 @@ function groupLines(items){
   }
   return rows.map(r => {
     r.parts.sort((a,b) => a.x - b.x);
-    return clean(r.parts.map(p => p.t).join(' '));
+    // Fonts like this one emit a glyph at a time. Joining on position instead of
+    // per run is what turns "R e u p h o l s t e r y" back into a word.
+    let out = '', end = null;
+    r.parts.forEach(p => {
+      if(end !== null && p.x - end > (p.es || 10) * 0.45) out += ' ';
+      out += p.t;
+      end = p.x + p.w;
+    });
+    return clean(out.replace(/[\u0000-\u0008\u000e-\u001f]/g, ''));
   }).filter(Boolean);
 }
 let lastPdf = {encrypted: false, objects: 0, streams: 0, textStreams: 0, chars: 0, lines: []};
@@ -752,7 +811,7 @@ async function pdfToLines(buf){
   lastPdf = {encrypted: /\/Encrypt\s+\d+\s+\d+\s+R/.test(s), objects: Object.keys(objs).length,
              streams: 0, textStreams: 0, chars: 0, lines: []};
   const cmaps = await buildCMaps(bytes, s, objs);
-  let items = [];
+  let out = [];
   for(const num in objs){
     const raw = streamOf(bytes, s, objs[num]);
     if(!raw) continue;
@@ -762,9 +821,8 @@ async function pdfToLines(buf){
     const txt = latin1(data);
     if(!/\bBT\b/.test(txt) || !/(Tj|TJ)/.test(txt)) continue;
     lastPdf.textStreams++;
-    try{ items = items.concat(runContent(tokenizeContent(txt), cmaps)); }catch(e){}
+    try{ out = out.concat(groupLines(runContent(tokenizeContent(txt), cmaps))); }catch(e){}
   }
-  const out = groupLines(items);
   lastPdf.lines = out;
   lastPdf.chars = out.join('').length;
   return out;
@@ -772,7 +830,7 @@ async function pdfToLines(buf){
 
 
 /* ---------- reading quote lines ---------- */
-const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|price list|effective|p\.?o\.?)/i;
+const SKIP = /^(sub\s?total|subtotal|total|grand total|vat|tax|discount|balance|amount in words|terms|notes?|thank|authori[sz]ed|signature|quote|estimate|proforma|invoice|date|expiry|valid|customer|bill to|ship to|place of supply|trn|page \d|item ?& ?description|s\.?no|qty|rate|amount|currency|salesperson|reference|price list|effective|standard rate|rounding|round off|payment made|balance due|deposit|advance|shipping charge|delivery charge|p\.?o\.?)/i;
 function parseTextLines(rawLines){
   const out = [];
   for(const raw of rawLines){
@@ -786,16 +844,28 @@ function parseTextLines(rawLines){
     const lastLetter = line.search(/[A-Za-z](?![\s\S]*[A-Za-z])/);
     const tail = nums.filter(n => n.at > lastLetter);
     if(tail.length < 2) continue;
-    let qty, price;
-    if(tail.length >= 3){ qty = tail[tail.length-3].v; price = tail[tail.length-2].v; }
-    else{
-      price = tail[0].v;
-      qty = price > 0 ? Math.round(tail[1].v/price) : 1;
-      if(!isFinite(qty) || qty < 1) qty = 1;
+    // Don't assume which column is which — quotes carry Tax and Discount columns
+    // too. The amount is last; find the pair before it that multiplies out to it.
+    const amount = tail[tail.length-1].v;
+    let qty = null, price = null;
+    for(let i = 0; i < tail.length-1 && qty === null; i++){
+      for(let j = i+1; j < tail.length-1; j++){
+        const a = tail[i].v, r = tail[j].v;
+        if(!(a > 0) || !(r > 0) || a > 9999) continue;
+        if(Math.abs(a*r - amount) <= Math.max(0.05, Math.abs(amount)*0.005)){ qty = a; price = r; break; }
+      }
+    }
+    if(qty === null){
+      if(tail.length >= 3){ qty = tail[tail.length-3].v; price = tail[tail.length-2].v; }
+      else{
+        price = tail[0].v;
+        qty = price > 0 ? Math.round(amount/price) : 0;
+      }
     }
     if(!(price > 0) || !(qty > 0) || qty > 9999) continue;
     let name = clean(line.slice(0, tail[0].at).replace(/^\d+[.)]?\s+/, '')).replace(/[|:;,\-\s]+$/,'');
     if(name.replace(/[^A-Za-z]/g,'').length < 3) continue;
+    if(name.length > 90) continue;                       // a paragraph, not an item
     out.push({name, qty, price});
   }
   return out;
@@ -922,6 +992,8 @@ function render(){
 const pill = (cls, txt) => el('span', 'pctpill ' + cls, txt);
 function updateAll(){
   const t = totals();
+  // With no cost on any line, profit is not 100% — it is unknown. Say so.
+  const noCost = t.cost === 0 && t.missing > 0;
   state.lines.forEach(l => {
     const tr = $('rows').querySelector('tr[data-id="' + l.id + '"]');
     if(!tr) return;
@@ -948,23 +1020,25 @@ function updateAll(){
     ? (t.offList > 0.0001 ? pc(t.offList) + ' below retail' : t.offList < -0.0001 ? pc(-t.offList) + ' above retail' : 'quoted at retail') + ' · ' + priced + '/' + state.lines.length + ' lines'
     : 'no book match yet';
   $('sCost').textContent = money0(t.cost);
-  $('sGp').textContent = money0(t.gp);
-  $('sGpN').textContent = t.rev > 0 ? 'Markup on cost ' + pc(t.markup) + ' · ×' + (t.cost > 0 ? (t.rev/t.cost).toFixed(2) : '0') : 'Quote minus cost';
+  $('sGp').textContent = noCost ? '—' : money0(t.gp);
+  $('sGpN').textContent = noCost ? 'no cost on any line yet'
+    : t.rev > 0 ? 'Markup on cost ' + pc(t.markup) + ' · ×' + (t.cost > 0 ? (t.rev/t.cost).toFixed(2) : '0') : 'Quote minus cost';
   const mv = $('sMargin');
-  mv.textContent = t.rev > 0 ? pc(t.margin) : '—';
-  mv.className = 'v tab' + (t.rev > 0 ? ' ' + bandOf(t.margin) : '');
+  mv.textContent = (t.rev > 0 && !noCost) ? pc(t.margin) : '—';
+  mv.className = 'v tab' + ((t.rev > 0 && !noCost) ? ' ' + bandOf(t.margin) : '');
   $('sMarginN').textContent = 'Target ' + targetLabel() + (state.mode === 'margin' ? '' : ' = ' + pc(targetFraction()) + ' margin');
   const meter = $('sMeter');
-  meter.style.width = Math.max(0, Math.min(100, t.margin*100)) + '%';
-  meter.style.background = t.rev > 0 ? 'var(--' + ({good:'green', warn:'amber', bad:'red'}[bandOf(t.margin)]) + ')' : 'var(--sep)';
+  meter.style.width = noCost ? '0%' : Math.max(0, Math.min(100, t.margin*100)) + '%';
+  meter.style.background = (t.rev > 0 && !noCost) ? 'var(--' + ({good:'green', warn:'amber', bad:'red'}[bandOf(t.margin)]) + ')' : 'var(--sep)';
   $('fRev').textContent = money0(t.rev);
   $('fList').textContent = t.list > 0 ? money0(t.list) : '—';
   $('fOff').textContent = '';
   if(t.list > 0) $('fOff').appendChild(pill(offBand(t.offList), t.offList > 0.0001 ? '−' + pc(t.offList,0) : 'at retail'));
   else $('fOff').textContent = '—';
-  $('fGp').textContent = money0(t.gp);
+  $('fGp').textContent = noCost ? '—' : money0(t.gp);
   $('fMargin').textContent = '';
-  if(t.rev > 0) $('fMargin').appendChild(pill(bandOf(t.margin), pc(t.margin)));
+  if(t.rev > 0 && !noCost) $('fMargin').appendChild(pill(bandOf(t.margin), pc(t.margin)));
+  else $('fMargin').textContent = '—';
   $('lineCount').textContent = state.lines.length + (state.lines.length === 1 ? ' line' : ' lines');
   const bn = $('banner');
   const unsure = state.lines.filter(l => l.book && !l.bookSure).length;
@@ -987,6 +1061,11 @@ function paintGap(t){
   const box = $('gapRead');
   box.textContent = '';
   if(!state.lines.length || t.rev <= 0){ box.appendChild(el('span','sub','Load a quote to see the gap to target.')); return; }
+  if(t.cost === 0 && t.missing > 0){
+    box.appendChild(el('span','big','No cost yet'));
+    box.appendChild(el('span','sub','Nothing on this quote is matched to a cost, so there is no margin to measure. Pick the COGS item with ⇄ on each line, or type the cost in.'));
+    return;
+  }
   const need = requiredRevenue(t.cost), gap = need - t.rev;
   const label = targetLabel() + (state.mode === 'margin' ? '' : ' (' + pc(targetFraction()) + ' margin)');
   if(gap > 0.5){
