@@ -1,8 +1,9 @@
 # HBN Margin Desk
 
 The sales desk: look a price up, build the quote, see the margin before it goes out.
+Plus a prompt desk for the marketing images and clips.
 
-Two screens.
+Three screens.
 
 **Price book** — the whole June 2026 price book, 228 lines, searchable and filterable
 by category and brand. Purchase price, retail price, margin, multiple on cost, and the
@@ -21,6 +22,23 @@ Valencia fabric upcharge. Every row has a **Quote this** button that starts a qu
 
 Quotes save as you type.
 
+**Prompt desk** — structured prompts for image and video models, and a Generate button
+that runs them through Replicate. Nobody writes a paragraph: you fill fields, and the
+page assembles the prompt.
+
+- **Image** — subject, action, setting, lighting, lens, composition, style, palette,
+  mood and detail, rendered for Midjourney, Stable Diffusion, plain language or JSON
+- **Video** — the same plus camera move, subject motion, pacing, duration, audio and a
+  **first frame** and **last frame**. Most video prompts fail because they describe a
+  picture instead of a change over time; those two fields fix that.
+- **Shot list** — scene defaults every shot inherits, then a list of shots that each add
+  what happens, a camera move and a duration. Renders as one numbered sequence with the
+  total runtime, or as a storyboard. Generation runs one shot at a time.
+
+Presets fill every field in a click, the negative prompt is assembled from grouped
+failure modes, and a reference image can be uploaded for the models that take one.
+Fields and saved prompts persist in the browser.
+
 ## Running it
 
 ```bash
@@ -38,6 +56,40 @@ npm run dev          # http://localhost:3000
 Without Supabase, **each person's quotes live in their own browser**. Good for one
 person on one machine; not good for a team. The badge in the top right says which mode
 you are in.
+
+## Turning on generation
+
+The prompt desk builds prompts with no setup. To make **Generate** work:
+
+1. Get a token at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
+2. Put it in `.env.local`:
+
+   ```
+   REPLICATE_API_TOKEN=r8_...
+   ```
+
+3. Restart the dev server. On Vercel, add the same variable in project settings.
+
+The token is read server-side in `app/api/generate/route.ts` and never reaches the
+browser — the page talks to that route, and the route talks to Replicate. Without the
+token the panel says so and the rest of the desk carries on working.
+
+Runs cost money, per generation, on your Replicate account. Stills are cents; video is
+appreciably more. Start on FLUX Schnell to check a prompt before spending on Pro.
+
+**Generated files are deleted by Replicate an hour after the run.** Results are held in
+the page for the session only — download anything worth keeping.
+
+### Changing the models on offer
+
+Every model is one row in `MODELS` in `lib/replicate.ts`, declaring which input key
+takes the prompt, which takes a reference image, whether it accepts a negative prompt,
+and which aspect ratios it allows. The route builds the request from that table and
+omits whatever a model does not declare, so adding one is a row and no new code.
+
+Replicate renames and retires models. If one starts failing with "model not found",
+check the slug on replicate.com and edit its `id` — upstream errors are passed through
+to the UI verbatim, so it will say exactly that.
 
 ## Connecting Supabase
 

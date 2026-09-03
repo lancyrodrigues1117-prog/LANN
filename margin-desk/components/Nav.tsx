@@ -7,6 +7,7 @@ import { storeKind } from '@/lib/store';
 const LINKS = [
   { href: '/quotes', label: 'Quotes' },
   { href: '/price-book', label: 'Price book' },
+  { href: '/prompt-desk', label: 'Prompt desk' },
 ];
 
 export default function Nav() {

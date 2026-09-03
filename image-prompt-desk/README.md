@@ -49,6 +49,21 @@ page assembles a model-ready prompt plus a matching negative prompt.
   along with the current fields, so the page reopens where you left it.
   *Clear* keeps the favourites.
 
+## The two versions
+
+This page is the offline one: a single file, no build step, no network calls, and no
+account. It builds prompts and nothing else.
+
+The same desk also lives inside the Next app at `../margin-desk` (`/prompt-desk`), where
+it additionally **generates** — a model picker, a reference-image upload and a Generate
+button that runs the prompt through Replicate with the API token held server-side. Use
+this file when you want something to hand someone or open on a plane; use the app when
+you want pictures out of it.
+
+The vocabulary and the builders are duplicated: this file carries its own copy so it can
+stay a single file, and `margin-desk/lib/prompt.ts` is the app's copy. Changing a preset
+or a suggestion list in one means changing it in the other.
+
 ## Extending the vocabulary
 
 Every suggestion list lives in the `OPTS` object at the top of the first
